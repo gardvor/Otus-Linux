@@ -23,3 +23,4 @@ Hashicorp Vagrant, Oracle VirtualBox
 * systemctl status spawn-fcgi.service
 * systemctl status httpd@first
 * systemctl status httpd@second
+Сервисы должны быть в статусе active
