@@ -1,0 +1,10 @@
+[Unit]
+Description=Run watchlog script every 33 second
+
+[Timer]
+# Run every 33 second
+OnUnitActiveSec=33
+Unit=watchlog.service
+
+[Install]
+WantedBy=multi-user.target
