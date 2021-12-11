@@ -1,0 +1,108 @@
+[vagrant@zfs ~]$ sudo -s
+[root@zfs vagrant]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   40G  0 disk
+└─sda1   8:1    0   40G  0 part /
+sdb      8:16   0  512M  0 disk
+sdc      8:32   0  512M  0 disk
+sdd      8:48   0  512M  0 disk
+sde      8:64   0  512M  0 disk
+sdf      8:80   0  512M  0 disk
+sdg      8:96   0  512M  0 disk
+sdh      8:112  0  512M  0 disk
+sdi      8:128  0  512M  0 disk
+[root@zfs vagrant]# zpool create otus1 mirror /dev/sdb /dev/sdc
+[root@zfs vagrant]# zpool create otus2 mirror /dev/sdf /dev/sde
+[root@zfs vagrant]# zpool create otus3 mirror /dev/sdd /dev/sdg
+[root@zfs vagrant]# zpool create otus4 mirror /dev/sdh /dev/sdi
+[root@zfs vagrant]# zfs set compression=lzjb otus1
+[root@zfs vagrant]# zfs set compression=lz4 otus2
+[root@zfs vagrant]# zfs set compression=gzip-9 otus3
+[root@zfs vagrant]# zfs set compression=zle otus4
+[root@zfs vagrant]# zfs get all | grep compression
+otus1  compression           lzjb                   local
+otus2  compression           lz4                    local
+otus3  compression           gzip-9                 local
+otus4  compression           zle                    local
+[root@zfs vagrant]#  for i in {1..4}; do wget -P /otus$i https://gutenberg.org/cache/epub/2600/pg2600.converter.log; done
+[root@zfs vagrant]# ls -l /otus*
+/otus1:
+total 22013
+-rw-r--r--. 1 root root 40767635 Dec  2 09:08 pg2600.converter.log
+
+/otus2:
+total 17968
+-rw-r--r--. 1 root root 40767635 Dec  2 09:08 pg2600.converter.log
+
+/otus3:
+total 10947
+-rw-r--r--. 1 root root 40767635 Dec  2 09:08 pg2600.converter.log
+
+/otus4:
+total 39841
+-rw-r--r--. 1 root root 40767635 Dec  2 09:08 pg2600.converter.log
+[root@zfs vagrant]# zfs list
+NAME    USED  AVAIL     REFER  MOUNTPOINT
+otus1  21.6M   330M     21.5M  /otus1
+otus2  17.7M   334M     17.6M  /otus2
+otus3  10.8M   341M     10.7M  /otus3
+otus4  39.0M   313M     38.9M  /otus4
+[root@zfs vagrant]# zfs get all | grep compressratio | grep -v ref
+otus1  compressratio         1.81x                  -
+otus2  compressratio         2.22x                  -
+otus3  compressratio         3.64x                  -
+otus4  compressratio         1.00x                  -
+[root@zfs vagrant]# wget -O archive.tar.gz --no-check-certificate 'https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hL
+JivOAt60yukkg&export=dowmnload'
+[root@zfs vagrant]# tar -xzvf archive.tar.gz
+zpoolexport/
+zpoolexport/filea
+zpoolexport/fileb
+[root@zfs vagrant]# zpool import -d zpoolexport/
+   pool: otus
+     id: 6554193320433390805
+  state: ONLINE
+ action: The pool can be imported using its name or numeric identifier.
+ config:
+
+        otus                                 ONLINE
+          mirror-0                           ONLINE
+            /home/vagrant/zpoolexport/filea  ONLINE
+            /home/vagrant/zpoolexport/fileb  ONLINE
+[root@zfs vagrant]# zpool import -d zpoolexport/ otus
+[root@zfs vagrant]# zpool status otus
+  pool: otus
+ state: ONLINE
+  scan: none requested
+config:
+
+        NAME                                 STATE     READ WRITE CKSUM
+        otus                                 ONLINE       0     0     0
+          mirror-0                           ONLINE       0     0     0
+            /home/vagrant/zpoolexport/filea  ONLINE       0     0     0
+            /home/vagrant/zpoolexport/fileb  ONLINE       0     0     0
+
+errors: No known data errors
+[root@zfs vagrant]# zpool get all otus | grep size | grep -v expand
+otus  size                           480M
+[root@zfs vagrant]# zfs get all otus | grep type | grep -v acltype
+otus  type                  filesystem             -
+[root@zfs vagrant]# zfs get all otus | grep recordsize
+otus  recordsize            128K                   local
+[root@zfs vagrant]# zfs get all otus | grep compression
+otus  compression           zle                    local
+[root@zfs vagrant]# zfs get all otus | grep checksum
+otus  checksum              sha256                 local
+[root@zfs vagrant]# wget -O otus_task2.file --no-check-certificate https://drive.google.com/u/0/uc?id=1gH8gCL9y7Nd5Ti3IRmp
+lZPF1XjzxeRAG&export=download
+[root@zfs vagrant]# zfs receive otus/test@today < otus_task2.file
+[root@zfs vagrant]# find /otus/test -name "secret_message"
+/otus/test/task1/file_mess/secret_message
+[root@zfs vagrant]# cat /otus/test/task1/file_mess/secret_message
+https://github.com/sindresorhus/awesome
+
+
+
+
+
+
