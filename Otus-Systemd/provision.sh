@@ -13,14 +13,9 @@ cp /vagrant/httpd/httpd-first /etc/sysconfig/ &&
 cp /vagrant/httpd/httpd-second /etc/sysconfig/ &&
 cp /vagrant/httpd/first.conf /etc/httpd/conf/ &&
 cp /vagrant/httpd/second.conf /etc/httpd/conf/ &&
-systemctl start watchlog.timer
-systemctl start watchlog.service 
-systemctl start spawn-fcgi.service
-systemctl start httpd@first
-systemctl start httpd@second
-
-
-
-
-
-
+systemctl daemon-reload &&
+systemctl start watchlog.timer &&
+systemctl start watchlog.service &&
+systemctl start spawn-fcgi.service &&
+systemctl start httpd@first &&
+systemctl start httpd@second &&
