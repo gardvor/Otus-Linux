@@ -19,7 +19,7 @@ Hashicorp Vagrant, Oracle VirtualBox
  
 ## Домашнее задание
 Домашнее задание проверяется коммандами
-tail -f /var/log/messages
-systemctl status spawn-fcgi.service
-systemctl status httpd@first
-systemctl status httpd@second
+* tail -f /var/log/messages
+* systemctl status spawn-fcgi.service
+* systemctl status httpd@first
+* systemctl status httpd@second
