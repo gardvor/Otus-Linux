@@ -18,4 +18,4 @@ systemctl start watchlog.timer &&
 systemctl start watchlog.service &&
 systemctl start spawn-fcgi.service &&
 systemctl start httpd@first &&
-systemctl start httpd@second &&
+systemctl start httpd@second
