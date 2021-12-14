@@ -30,9 +30,9 @@
 
 
 ### 2.Установить систему с LVM, после чего переименовать VG
-####Прикладываю текстовый файл с рабочими конфигами после переименования VolumeGroup из rl в otusroot
-####Плюс к файлам из методички
-####/etc/fstab
+#### Прикладываю текстовый файл с рабочими конфигами после переименования VolumeGroup из rl в otusroot
+#### Плюс к файлам из методички
+#### /etc/fstab
 ```
 # cat /etc/fstab
 # Created by anaconda on Tue Dec  7 17:02:17 2021
@@ -48,7 +48,7 @@ UUID=da3a9f75-20d8-4ba2-befc-a63473e65753 /boot                   xfs     defaul
 /dev/mapper/otusroot-swap     none                    swap    defaults        0 0
 [root@localhost ~]#
 ```
-####/etc/default/grub
+#### /etc/default/grub
 ```
 [root@localhost ~]# cat /etc/default/grub
 GRUB_TIMEOUT=5
@@ -60,7 +60,7 @@ GRUB_CMDLINE_LINUX="crashkernel=auto resume=/dev/mapper/otusroot-swap rd.lvm.lv=
 GRUB_DISABLE_RECOVERY="true"
 GRUB_ENABLE_BLSCFG=true
 ```
-####/boot/grub2/grub.cfg
+#### /boot/grub2/grub.cfg
 ```
 [root@localhost ~]# cat /boot/grub2/grub.cfg
 #
@@ -276,8 +276,8 @@ elif [ -z "${config_directory}" -a -f  $prefix/custom.cfg ]; then
 fi
 ### END /etc/grub.d/41_custom ###
 ```
-####Нужно было отредактировать файл
-####/boot/grub2/grubenv
+#### Нужно было отредактировать файл
+#### /boot/grub2/grubenv
 
 ```
 [root@localhost ~]# cat /boot/grub2/grubenv
