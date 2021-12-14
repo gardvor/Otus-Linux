@@ -291,4 +291,7 @@ boot_success=0
 #### После перезагрузки все заработало с новым именем VG otusroot
 
 ### 3. Добавить модуль в initrd
+
+#### Задание делал по методичке. Результат получил
+
 ![Dracut](https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/Dracut.jpg)
