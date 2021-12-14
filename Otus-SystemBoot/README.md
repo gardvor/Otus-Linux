@@ -6,4 +6,4 @@
 
 
 ## Домашнее задание
-![https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/init1.jpg]
+![Init1](https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/init1.jpg)
