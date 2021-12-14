@@ -287,3 +287,8 @@ kernelopts=root=/dev/mapper/otusroot-root ro crashkernel=auto resume=/dev/mapper
 boot_success=0
 
 ```
+
+#### После перезагрузки все заработало с новым именем VG otusroot
+
+### 3. Добавить модуль в initrd
+![Dracut](https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/Dracut.jpg)
