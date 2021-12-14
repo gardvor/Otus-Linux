@@ -6,9 +6,4 @@
 
 
 ## Домашнее задание
-Домашнее задание проверяется коммандами
-* tail -f /var/log/messages
-* systemctl status spawn-fcgi.service
-* systemctl status httpd@first
-* systemctl status httpd@second
-Сервисы должны быть в статусе active
+![https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/init1.jpg]
