@@ -10,13 +10,13 @@
 
 
 
-*init=/bin/sh
+1. init=/bin/sh
 ![Init1](https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/init1.jpg)
 
 
-*rd.break 
+2. rd.break 
 ![rd.break](https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/rd.break.jpg)
 
 
-*rw init=/sysroot/bin/sh
+3. rw init=/sysroot/bin/sh
 ![init2](https://github.com/gardvor/Otus-Linux/blob/main/Otus-SystemBoot/Init%202.jpg)
