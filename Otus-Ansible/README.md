@@ -17,7 +17,8 @@ Hashicorp Vagrant, Oracle VirtualBox
 ## Домашнее задание
 * Копируем все файлы из репозитория в одну папку
 * Запускаем проект командой vagrant up
-* Заходим на виртуальную машину a_server командой vagrant ssh a_server
+* Заходим на виртуальную машину a_server командой vagrant ssh a_server #sgfsdfsd
+* переходим в папку проекта cd /vagrant/
 * 
 * tail -f /var/log/messages
 * systemctl status spawn-fcgi.service
