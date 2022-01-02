@@ -13,6 +13,7 @@ Hashicorp Vagrant, Oracle VirtualBox
 
 * Vagrant создает две виртуальные машины a_host и a_server
 * На виртульную машину a_server скриптом ansible_install.sh устанавливает Ansible
+* Устанавливать nginx будем на машину a_host с адресом 192.168.50.10
  
 ## Домашнее задание
 * Копируем все файлы из репозитория в одну папку
@@ -24,6 +25,15 @@ vagrant up
 ```
 vagrant ssh a_server 
 ```
-* cd /vagrant/
-* ansible-playbook ./playbooks/nginx.yml  -i ./inventories/hosts
-* curl 192.168.50.10:8080
+* Переходим в папку проекта
+```
+cd /vagrant/
+```
+* Запускаем playbook
+```
+ansible-playbook ./playbooks/nginx.yml  -i ./inventories/hosts
+```
+* Проверка доступа к целевой машине
+```
+curl 192.168.50.10:8080
+```
