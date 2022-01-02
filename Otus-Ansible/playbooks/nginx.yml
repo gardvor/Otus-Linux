@@ -1,0 +1,36 @@
+---
+- hosts: ahost
+  gather_facts: false
+  become: true
+  vars:
+   nginx_port: 8080
+
+  handlers:
+      - name: reload nginx
+        service:
+         name: nginx
+         state: reloaded
+
+  tasks:
+     - name: "Ping server"
+       ping:
+
+     - name: 'Install nginx'
+       yum:
+          name:
+            - nginx
+          state: present
+
+
+     - name: "Add Nginx to startup an start"
+       service:
+         name: nginx
+         enabled: yes
+         state: started
+
+     - name: "Copy nginx.conf"
+       template:
+          src: /vagrant/templates/nginx.conf.j2
+          dest: /etc/nginx/nginx.conf
+       notify:
+       - reload nginx

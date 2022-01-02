@@ -1,0 +1,9 @@
+[ahost]
+192.168.50.10
+
+[ahost:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_pass=vagrant
+
+[aserver]
+192.168.50.11
