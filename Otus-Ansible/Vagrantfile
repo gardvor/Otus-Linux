@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+	config.vm.box = "centos/8"
+	config.vm.box_version = "2011.0"
+
+	config.vm.provider "virtualbox" do |v|
+	v.memory = 256
+	v.cpus = 1
+	end
+	
+	
+	config.vm.define "a_host" do |a_host|
+		a_host.vm.network "private_network", ip: "192.168.50.10",
+		virtualbox__intnet: "net1"
+		a_host.vm.hostname = "ahost"
+#		a_host.ssh.username = 'vagrant'
+#		a_host.ssh.password = 'vagrant'
+#  		a_host.ssh.keys_only = false
+		a_host.vm.provision "shell", inline: <<-SHELL
+		sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		systemctl restart sshd.service
+		SHELL
+
+	end
+
+
+	config.vm.define "a_server" do |a_server|
+		a_server.vm.network "private_network", ip: "192.168.50.11",
+		virtualbox__intnet: "net1"
+		a_server.vm.hostname = "aserver"
+#		config.ssh.username = 'vagrant'
+# 		config.ssh.password = 'vagrant'
+# 		config.ssh.keys_only = false
+		a_server.vm.provision "shell", path: "ansible_install.sh"
+		a_server.vm.provision "shell", inline: <<-SHELL
+		sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		systemctl restart sshd.service
+		SHELL
+	end
+end
