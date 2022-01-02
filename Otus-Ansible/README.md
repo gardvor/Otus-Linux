@@ -16,8 +16,14 @@ Hashicorp Vagrant, Oracle VirtualBox
  
 ## Домашнее задание
 * Копируем все файлы из репозитория в одну папку
-* Запускаем проект командой vagrant up
-* vagrant ssh a_server 
+* Запускаем проект командой 
+```
+vagrant up
+```
+* Подключаемся к a_server
+```
+vagrant ssh a_server 
+```
 * cd /vagrant/
 * ansible-playbook ./playbooks/nginx.yml  -i ./inventories/hosts
 * curl 192.168.50.10:8080
