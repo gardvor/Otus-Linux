@@ -95,16 +95,22 @@ Jan 03 17:43:32 selinux nginx[26195]: nginx: the configuration file /etc/nginx/n
 Jan 03 17:43:32 selinux nginx[26195]: nginx: configuration file /etc/nginx/nginx.conf test is successful
 Jan 03 17:43:32 selinux systemd[1]: nginx.service: Failed to parse PID from file /run/nginx.pid: Invalid argument
 Jan 03 17:43:32 selinux systemd[1]: Started The nginx HTTP and reverse proxy server.
-``````
-[root@selinux ~]# getenforce
-Enforcing
-``````
-[root@selinux ~]# getenforce
-Enforcing
-``````
-[root@selinux ~]# getenforce
-Enforcing
-``````
+```
+* Проверим работу nginx
+```
+[root@selinux ~]# curl 127.0.0.1:4881
+```
+* Проверим статус параметра nis_enabled
+```
+[root@selinux ~]# getsebool -a | grep nis_enabled
+nis_enabled --> on
+```
+* Вернем запрет работы nginx
+```
+[root@selinux ~]# setsebool -P nis_enabled 0
+```
+### Разрешим в SELinux работу nginx на порту TCP 4881 c помощью добавления нестандартного порта в имеющийся тип
+```
 [root@selinux ~]# getenforce
 Enforcing
 ```
