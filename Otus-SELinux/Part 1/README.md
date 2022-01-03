@@ -156,10 +156,21 @@ Jan 03 17:55:51 selinux systemd[1]: Started The nginx HTTP and reverse proxy ser
 * Проверяем работу nginx
 ```
 curl 127.0.0.1:4881
-```* Вернем запрет работы nginx
 ```
-[root@selinux ~]# setsebool -P nis_enabled 0
-```* Вернем запрет работы nginx
+* Удаляем порт из типа http_port_t 
+```
+[root@selinux ~]# semanage port -d -t http_port_t -p tcp 4881
+[root@selinux ~]# semanage port -l | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+```
+### Разрешим в SELinux работу nginx на порту TCP 4881 c помощью формирования и установки модуля SELinux:
+
+
+* Вернем запрет работы nginx
 ```
 [root@selinux ~]# setsebool -P nis_enabled 0
 ```* Вернем запрет работы nginx
