@@ -170,13 +170,43 @@ pegasus_https_port_t           tcp      5989
 ### Разрешим в SELinux работу nginx на порту TCP 4881 c помощью формирования и установки модуля SELinux:
 
 
-* Вернем запрет работы nginx
+* Воспользуемся утилитой audit2allow для того, чтобы на основе логов SELinux сделать модуль, разрешающий работу nginx на нестандартном порту:
+
 ```
-[root@selinux ~]# setsebool -P nis_enabled 0
-```* Вернем запрет работы nginx
+[root@selinux ~]# grep nginx /var/log/audit/audit.log | audit2allow -M nginx
+******************** IMPORTANT ***********************
+To make this policy package active, execute:
+
+semodule -i nginx.pp
 ```
-[root@selinux ~]# setsebool -P nis_enabled 0
-```* Вернем запрет работы nginx
+* Запустим сформированыый модуль
 ```
-[root@selinux ~]# setsebool -P nis_enabled 0
+[root@selinux ~]# semodule -i nginx.pp
+```
+* Перезапустим nginx
+```
+[root@selinux ~]# systemctl restart nginx
+[root@selinux ~]# systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+   Active: active (running) since Mon 2022-01-03 18:05:02 UTC; 6s ago
+  Process: 26306 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+  Process: 26304 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+  Process: 26303 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+ Main PID: 26308 (nginx)
+    Tasks: 2 (limit: 5972)
+   Memory: 3.9M
+   CGroup: /system.slice/nginx.service
+           ├─26308 nginx: master process /usr/sbin/nginx
+           └─26309 nginx: worker process
+
+Jan 03 18:05:02 selinux systemd[1]: Starting The nginx HTTP and reverse proxy server...
+Jan 03 18:05:02 selinux nginx[26304]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Jan 03 18:05:02 selinux nginx[26304]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Jan 03 18:05:02 selinux systemd[1]: nginx.service: Failed to parse PID from file /run/nginx.pid: Invalid argument
+Jan 03 18:05:02 selinux systemd[1]: Started The nginx HTTP and reverse proxy server.
+```
+* Проверим работу nginx
+```
+curl 127.0.0.1:4881
 ```
