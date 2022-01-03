@@ -42,7 +42,34 @@ vagrant ssh
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
-* Проверка доступа к целевой машине
+* Проверяем режим работы SELinux
 ```
-curl 192.168.50.10:8080
+[root@selinux ~]# getenforce
+Enforcing
+```
+### Разрешим в SELinux работу nginx на порту TCP 4881 c помощью переключателей setsebool
+```
+[root@selinux ~]# getenforce
+Enforcing
+``````
+[root@selinux ~]# getenforce
+Enforcing
+``````
+[root@selinux ~]# getenforce
+Enforcing
+``````
+[root@selinux ~]# getenforce
+Enforcing
+``````
+[root@selinux ~]# getenforce
+Enforcing
+``````
+[root@selinux ~]# getenforce
+Enforcing
+``````
+[root@selinux ~]# getenforce
+Enforcing
+``````
+[root@selinux ~]# getenforce
+Enforcing
 ```
