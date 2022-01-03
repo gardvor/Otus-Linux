@@ -68,3 +68,25 @@ drw-rwx---. root named unconfined_u:object_r:etc_t:s0   dynamic
 -rw-rw----. root named system_u:object_r:etc_t:s0       named.newdns.lab
 [root@ns01 ~]# 
 ```
+* Конфигурационные файлы лежат в неправильной папке. где к ним применяется не нужный в нашем случае контекст.
+* Корректные папки для конфигурационных файлов можно посмотреть командой
+```
+[root@ns01 ~]# semanage fcontext -l | grep named        
+/etc/rndc.*                                        regular file       system_u:object_r:named_conf_t:s0 
+/var/named(/.*)?                                   all files          system_u:object_r:named_zone_t:s0 
+/etc/unbound(/.*)?                                 all files          system_u:object_r:named_conf_t:s0 
+```
+* Изменим тип контекста безопасности папки /etc/named
+```
+[root@ns01 ~]# chcon -R -t named_zone_t /etc/named
+[root@ns01 ~]# ls -laZ /etc/named/        
+drw-rwx---. root named system_u:object_r:named_zone_t:s0 .
+drwxr-xr-x. root root  system_u:object_r:etc_t:s0       ..
+drw-rwx---. root named unconfined_u:object_r:named_zone_t:s0 dynamic
+-rw-rw----. root named system_u:object_r:named_zone_t:s0 named.50.168.192.rev
+-rw-rw----. root named system_u:object_r:named_zone_t:s0 named.dns.lab
+-rw-rw----. root named system_u:object_r:named_zone_t:s0 named.dns.lab.view1
+-rw-rw----. root named system_u:object_r:named_zone_t:s0 named.newdns.lab
+[root@ns01 ~]# 
+
+```
