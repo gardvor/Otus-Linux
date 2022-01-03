@@ -88,5 +88,21 @@ drw-rwx---. root named unconfined_u:object_r:named_zone_t:s0 dynamic
 -rw-rw----. root named system_u:object_r:named_zone_t:s0 named.dns.lab.view1
 -rw-rw----. root named system_u:object_r:named_zone_t:s0 named.newdns.lab
 [root@ns01 ~]# 
-
 ```
+* Попробуем опять внести измение с vm client
+```
+[vagrant@client ~]$ nsupdate -k /etc/named.zonetransfer.key 
+> server 192.168.50.10
+> zone ddns.lab
+> update add www.ddns.lab. 60 A 192.168.50.15
+> send
+> quit
+
+[vagrant@client ~]$ nslookup www.ddns.lab
+Server:		192.168.50.10
+Address:	192.168.50.10#53
+
+Name:	www.ddns.lab
+Address: 192.168.50.15
+```
+
