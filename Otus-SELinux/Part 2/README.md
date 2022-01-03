@@ -28,9 +28,22 @@ update failed: SERVFAIL
 - Реализовать выбранное решение и продемонстрировать его работоспособность.
 
 
-#### Формат
+#### Решение
+* Проверяем логи SELinux на vm client
+```
+[root@client ~]# cat /var/log/audit/audit.log  | audit2why
+[root@client ~]# 
+```
+* ошибок нет
+* подключимся на vm ns01
+```
+[root@localhost selinux_dns_problems]# vagrant ssh ns01
+Last login: Mon Jan  3 21:01:43 2022 from 10.0.2.2
+[vagrant@ns01 ~]$ sudo -i
+[root@ns01 ~]#  
+```
+* Проверяем логи SELinux на vm ns01
+```
 
-- README с анализом причины неработоспособности, возможными способами решения и обоснованием выбора одного из них.
-- Исправленный стенд или демонстрация работоспособной системы скриншотами и описанием.
-
+```
 
