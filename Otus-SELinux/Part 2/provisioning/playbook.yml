@@ -29,7 +29,7 @@
   - name: copy master zone dns.lab
     copy:
       src: "{{ item }}"
-      dest: /etc/named/
+      dest: /var/named/
       owner: root
       group: named
       mode: 0660
@@ -39,7 +39,7 @@
   - name: copy dynamic zone ddns.lab
     copy:
       src: files/ns01/named.ddns.lab
-      dest: /etc/named/dynamic/
+      dest: /var/named/dynamic/
       owner: named
       group: named
       mode: 0660
@@ -47,7 +47,7 @@
   - name: copy dynamic zone ddns.lab.view1
     copy:
       src: files/ns01/named.ddns.lab.view1
-      dest: /etc/named/dynamic/
+      dest: /var/named/dynamic/
       owner: named
       group: named
       mode: 0660
@@ -55,7 +55,7 @@
   - name: copy master zone newdns.lab
     copy:
       src: files/ns01/named.newdns.lab
-      dest: /etc/named/
+      dest: /var/named/
       owner: root
       group: named
       mode: 0660
@@ -63,7 +63,7 @@
   - name: copy rev zones
     copy:
       src: files/ns01/named.50.168.192.rev
-      dest: /etc/named/
+      dest: /var/named/
       owner: root
       group: named
       mode: 0660
@@ -84,16 +84,16 @@
       group: named
       mode: 0644
 
-  - name: set /etc/named permissions
+  - name: set /var/named permissions
     file:
-      path: /etc/named
+      path: /var/named
       owner: root
       group: named
       mode: 0670
 
-  - name: set /etc/named/dynamic permissions
+  - name: set /var/named/dynamic permissions
     file:
-      path: /etc/named/dynamic
+      path: /var/named/dynamic
       owner: root
       group: named
       mode: 0670
