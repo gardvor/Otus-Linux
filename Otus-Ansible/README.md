@@ -12,7 +12,7 @@ Hashicorp Vagrant, Oracle VirtualBox
 ## Как работает
 
 * Vagrant создает две виртуальные машины a_host и a_server
-* На виртульную машину a_server скриптом ansible_install.sh устанавливает Ansible
+* На виртуальную машину a_server скриптом ansible_install.sh устанавливает Ansible
 * Устанавливать nginx будем на машину a_host с адресом 192.168.50.10
  
 ## Домашнее задание
