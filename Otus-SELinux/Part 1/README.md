@@ -36,9 +36,11 @@ vagrant ssh
    Active: inactive (dead)
      Docs: man:firewalld(1)
 ```
-* Запускаем playbook
+* Проверяем корректность конфигурации nginx
 ```
-ansible-playbook ./playbooks/nginx.yml  -i ./inventories/hosts
+[root@selinux ~]# nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
 * Проверка доступа к целевой машине
 ```
