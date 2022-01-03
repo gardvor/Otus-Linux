@@ -44,6 +44,27 @@ Last login: Mon Jan  3 21:01:43 2022 from 10.0.2.2
 ```
 * Проверяем логи SELinux на vm ns01
 ```
+[root@ns01 ~]# cat /var/log/audit/audit.log  | audit2why
+type=AVC msg=audit(1641244203.787:1891): avc:  denied  { create } for  pid=5079 comm="isc-worker0000" name="named.ddns.lab.view1.jnl" scontext=system_u:system_r:named_t:s0 tcontext=system_u:object_r:etc_t:s0 tclass=file permissive=0
 
+	Was caused by:
+		Missing type enforcement (TE) allow rule.
+
+		You can use audit2allow to generate a loadable module to allow this access.
+
+[root@ns01 ~]# 
 ```
+* Ошибка контекста безопасности. Вместо типа named_t используется тип etc_t
 
+* Проверяем проблему в каталоге /etc/named
+```
+[root@ns01 ~]# ls -laZ /etc/named
+drw-rwx---. root named system_u:object_r:etc_t:s0       .
+drwxr-xr-x. root root  system_u:object_r:etc_t:s0       ..
+drw-rwx---. root named unconfined_u:object_r:etc_t:s0   dynamic
+-rw-rw----. root named system_u:object_r:etc_t:s0       named.50.168.192.rev
+-rw-rw----. root named system_u:object_r:etc_t:s0       named.dns.lab
+-rw-rw----. root named system_u:object_r:etc_t:s0       named.dns.lab.view1
+-rw-rw----. root named system_u:object_r:etc_t:s0       named.newdns.lab
+[root@ns01 ~]# 
+```
