@@ -56,7 +56,7 @@ type=AVC msg=audit(1641244203.787:1891): avc:  denied  { create } for  pid=5079 
 ```
 * Ошибка контекста безопасности. Вместо типа named_t используется тип etc_t
 
-* Проверяем проблему в каталоге /etc/named
+* Проверяем проблему в каталоге /etc/named куда скопированы файлы конфигурации
 ```
 [root@ns01 ~]# ls -laZ /etc/named
 drw-rwx---. root named system_u:object_r:etc_t:s0       .
