@@ -110,7 +110,62 @@ nis_enabled --> on
 [root@selinux ~]# setsebool -P nis_enabled 0
 ```
 ### Разрешим в SELinux работу nginx на порту TCP 4881 c помощью добавления нестандартного порта в имеющийся тип
+
+* Поиск имеющегося типа, для http трафика:
 ```
-[root@selinux ~]# getenforce
-Enforcing
+[root@selinux ~]# semanage port -l | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+```
+* Добавим порт в тип http_port_t:
+```
+[root@selinux ~]# semanage port -a -t http_port_t -p tcp 4881
+[root@selinux ~]# semanage port -l | grep http
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+http_port_t                    tcp      4881, 80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989
+```
+* Перезапускаем nginx
+```
+[root@selinux ~]# systemctl restart nginx
+[root@selinux ~]# systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+   Active: active (running) since Mon 2022-01-03 17:55:51 UTC; 5s ago
+  Process: 26248 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+  Process: 26246 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+  Process: 26245 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+ Main PID: 26250 (nginx)
+    Tasks: 2 (limit: 5972)
+   Memory: 3.9M
+   CGroup: /system.slice/nginx.service
+           ├─26250 nginx: master process /usr/sbin/nginx
+           └─26251 nginx: worker process
+
+Jan 03 17:55:51 selinux systemd[1]: Starting The nginx HTTP and reverse proxy server...
+Jan 03 17:55:51 selinux nginx[26246]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Jan 03 17:55:51 selinux nginx[26246]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Jan 03 17:55:51 selinux systemd[1]: nginx.service: Failed to parse PID from file /run/nginx.pid: Invalid argument
+Jan 03 17:55:51 selinux systemd[1]: Started The nginx HTTP and reverse proxy server.
+```
+* Проверяем работу nginx
+```
+curl 127.0.0.1:4881
+```* Вернем запрет работы nginx
+```
+[root@selinux ~]# setsebool -P nis_enabled 0
+```* Вернем запрет работы nginx
+```
+[root@selinux ~]# setsebool -P nis_enabled 0
+```* Вернем запрет работы nginx
+```
+[root@selinux ~]# setsebool -P nis_enabled 0
+```* Вернем запрет работы nginx
+```
+[root@selinux ~]# setsebool -P nis_enabled 0
 ```
