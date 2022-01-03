@@ -14,13 +14,27 @@ Hashicorp Vagrant, Oracle VirtualBox
 ```
 vagrant up
 ```
+* Vagrant выдает ошибку при запуске nginx
+```
+    selinux: Jan 03 17:19:12 selinux systemd[1]: Starting The nginx HTTP and reverse proxy server...
+    selinux: Jan 03 17:19:12 selinux nginx[25747]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+    selinux: Jan 03 17:19:12 selinux nginx[25747]: nginx: [emerg] bind() to 0.0.0.0:4881 failed (13: Permission denied)
+    selinux: Jan 03 17:19:12 selinux nginx[25747]: nginx: configuration file /etc/nginx/nginx.conf test failed
+    selinux: Jan 03 17:19:12 selinux systemd[1]: nginx.service: Control process exited, code=exited status=1
+    selinux: Jan 03 17:19:12 selinux systemd[1]: nginx.service: Failed with result 'exit-code'.
+    selinux: Jan 03 17:19:12 selinux systemd[1]: Failed to start The nginx HTTP and reverse proxy server.
+```
 * Подключаемся к виртуальной машине
 ```
 vagrant ssh
 ```
-* Переходим в папку проекта
+* Проверяем работает ли Firewall
 ```
-cd /vagrant/
+[root@selinux ~]# systemctl status firewalld
+● firewalld.service - firewalld - dynamic firewall daemon
+   Loaded: loaded (/usr/lib/systemd/system/firewalld.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+     Docs: man:firewalld(1)
 ```
 * Запускаем playbook
 ```
