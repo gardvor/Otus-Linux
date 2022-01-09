@@ -1,16 +1,24 @@
-echo "homework"|sudo passwd --stdin homework
-sudo bash -c "sed -i 's/^PasswordAuthentication.*$/PasswordAuthentication yes/' /etc/ssh/sshd_config && systemctl restart sshd.service"
-#dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo &&
-#dnf install docker-ce -y &&
+# Включаем вход по ssh при помощи паролей
+sudo bash -c "sed -i 's/^PasswordAuthentication.*$/PasswordAuthentication yes/' /etc/ssh/sshd_config && systemctl restart sshd.service" 
+
 sudo yum install nano -y
+# Добавляем тестовые группы
+groupadd megaadmins
 groupadd myusers
 groupadd admin
+# Добавялем группу admin для пользователя vagrant иначе не будет работать vagrant ssh
+usermod -a -G admin vagrant
+# Создаем тестовые группы и добавляем в них пользователей
 useradd -g myusers vasya
-useradd -g myusers petya
+useradd -g megaadmins petya
 useradd -g admin kolya
+# устанавливаем для пользователей пароли
 echo 123456 | passwd vasya --stdin
 echo 123456 | passwd petya --stdin
 echo 123456 | passwd kolya --stdin
+# копируем скрипт для pam_exec
 cp /vagrant/admin.sh /etc/admin.sh
 chmod +x /etc/admin.sh
+# включаем модуль pam_exec для входа по ssh
+sed -i '6i account    required     pam_exec.so /etc/admin.sh' /etc/pam.d/sshd
 systemctl restart sshd
