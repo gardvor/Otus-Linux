@@ -6,9 +6,9 @@ sudo yum install nano -y
 groupadd megaadmins
 groupadd myusers
 groupadd admin
-# Добавялем группу admin для пользователя vagrant иначе не будет работать vagrant ssh
+# Добавляем группу admin для пользователя vagrant иначе не будет работать vagrant ssh
 usermod -a -G admin vagrant
-# Создаем тестовые группы и добавляем в них пользователей
+# Создаем тестовых пользователей и добавляем их в тестовые группы
 useradd -g myusers vasya
 useradd -g megaadmins petya
 useradd -g admin kolya
