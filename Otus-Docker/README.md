@@ -7,7 +7,7 @@
 
 ## Домашнее задание
 * Образ выложен в репозиторий https://hub.docker.com/repository/docker/gardvor/otus_nginx
-* [Dockerfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Docker/Dockerfile)на основе которого создавался образ
+* [Dockerfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Docker/Dockerfile) на основе которого создавался образ
 * Качаем образ из репозитория
 ```
 
