@@ -8,7 +8,9 @@
 ## Домашнее задание
 * Образ выложен в репозиторий https://hub.docker.com/repository/docker/gardvor/otus_nginx
 * [Dockerfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Docker/Dockerfile) на основе которого создавался образ
-* файлы для настройки nginx [nginx.conf](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Docker/nginx.conf) [index.html] (https://github.com/gardvor/Otus-Linux/blob/main/Otus-Docker/index.html)
+* файлы для настройки nginx: 
+* [nginx.conf](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Docker/nginx.conf) 
+* [index.html](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Docker/index.html)
 * Качаем образ из репозитория
 ```
 
