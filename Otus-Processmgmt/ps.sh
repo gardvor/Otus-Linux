@@ -1,8 +1,8 @@
 #!/bin/bash
 
-fmt="%-30s%-30s%-85s%-10s%-10s\n"
-printf "$fmt" PID USER COMM STAT RSS
-
+fmt="%-10s%-30s%-10s%-20s%-20s%-10s%-500s\n"
+#printf "$fmt" PID USER COMM STAT RSS
+printf "$fmt" PID NAME  TTY USERNAME  STAT RSS COMMAND
 for proc in `ls /proc/ | egrep "^[0-9]" | sort -n`
 do
 
@@ -10,14 +10,15 @@ do
         then
         PID=$proc
 
-    COMM=`cat /proc/$proc/cmdline`
-    if  [[ -z "$COMM" ]]
+    if  [[ -f /proc/$proc/stat ]]
         then
-        COMM="[`awk '/Name/{print $2}' /proc/$proc/status`]"
+    CMD=`cat /proc/$proc/cmdline  | tr '\0' '\n' # | sed -e s/DBUS_SESSION_BUS_ADDRESS=//`
     else
-        COMM=`cat /proc/$proc/cmdline`
+        CMD=`n\a`
     fi
 
+    Name=`cat /proc/$proc/status | awk '/Name/{print $2}'`
+    TTY=`cat /proc/$proc/stat | rev | awk '{print $46}' | rev`
     User=`awk '/Uid/{print $2}' /proc/$proc/status`
     Stat=`cat /proc/$proc/status | awk '/State/{print $2}'`
     RSS=`cat /proc/$proc/status | awk '/VmRSS/{print $2}'`
@@ -27,6 +28,6 @@ do
     else
        UserName=`grep $User /etc/passwd | awk -F ":" '{print $1}'`
     fi
-    printf "$fmt" $PID $UserName "$COMM" $Stat $RSS
+    printf "$fmt" $PID $Name $TTY $UserName $Stat $RSS "$CMD"
     fi
 done
