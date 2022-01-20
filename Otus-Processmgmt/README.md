@@ -20,7 +20,7 @@ do
 
     if  [[ -f /proc/$proc/stat ]]
         then
-    CMD=`cat /proc/$proc/cmdline  | tr '\0' '\n' # | sed -e s/DBUS_SESSION_BUS_ADDRESS=//`
+    CMD=`cat /proc/$proc/cmdline  | tr '\0' '\n' 
     else
         CMD=`n\a`
     fi
