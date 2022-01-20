@@ -1,7 +1,6 @@
 #!/bin/bash
 
 fmt="%-10s%-30s%-10s%-20s%-20s%-10s%-500s\n"
-#printf "$fmt" PID USER COMM STAT RSS
 printf "$fmt" PID NAME  TTY USERNAME  STAT RSS COMMAND
 for proc in `ls /proc/ | egrep "^[0-9]" | sort -n`
 do
