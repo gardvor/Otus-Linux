@@ -8,6 +8,36 @@
 ## Домашнее задание
 Реализация ps
 
+Вывод команды ps ax
+```
+[root@server vagrant]# ps ax
+    PID TTY      STAT   TIME COMMAND
+      1 ?        Ss     0:05 /usr/lib/systemd/systemd --switched-root --system --deserialize 17
+      2 ?        S      0:00 [kthreadd]
+      3 ?        I<     0:00 [rcu_gp]
+      4 ?        I<     0:00 [rcu_par_gp]
+      6 ?        I<     0:00 [kworker/0:0H-kblockd]
+      8 ?        I<     0:00 [mm_percpu_wq]
+ ...
+ ```
+ * Откуда берутся данные
+ 
+ *PID 
+ Числовое имя директории 
+ ```
+ /proc/<PID>/
+ ```
+*TTY
+7й параметр в выводе cat /proc/[pid]/stat
+```
+man proc
+/proc/[pid]/stat
+ (7) tty_nr  %d
+                        The controlling terminal of the process.  (The minor device number is contained in the combination of bits 31 to 20 and 7 to 0; the major device number is in bits 15 to 8.)
+```                        
+
+
+
 ```
 fmt="%-10s%-30s%-10s%-20s%-20s%-10s%-500s\n"
 printf "$fmt" PID NAME  TTY USERNAME  STAT RSS COMMAND
