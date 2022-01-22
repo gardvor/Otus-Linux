@@ -18,7 +18,7 @@ do
     Name=`cat /proc/$proc/status | awk '/Name/{print $2}'`
     User=`awk '/Uid/{print $2}' /proc/$proc/status`
     Stat=`cat /proc/$proc/status | awk '/State/{print $2}'`
-    TTY=`cat /proc/$proc/stat | rev | awk '{print $46}' | rev` # В cat /proc/$proc/stat параметр {print $2} может быть пустым поэтому вместо 7го берем 46 параметр с конца.
+    TTY=`cat /proc/$proc/stat | rev | awk '{print $46}' | rev` # В cat /proc/$proc/stat параметр {print $2} может быть пустым поэтому вместо {print $7 }го берем {print $46} параметр с конца.
     if [[ User -eq 0 ]]
        then
        UserName='root'
