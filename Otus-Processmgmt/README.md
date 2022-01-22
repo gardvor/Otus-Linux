@@ -20,25 +20,25 @@
       8 ?        I<     0:00 [mm_percpu_wq]
  ...
  ```
- * Откуда берутся данные
+ ### Откуда берутся данные
  
- * PID 
- Числовое имя директории 
+ ### PID 
+ * Числовое имя директории 
  ```
  /proc/<PID>/
  ```
-* TTY
-7й параметр в выводе cat /proc/[pid]/stat
+### TTY
+* 7й параметр в выводе cat /proc/[pid]/stat
 ```
 man proc
 /proc/[pid]/stat
  (7) tty_nr  %d
                         The controlling terminal of the process.  (The minor device number is contained in the combination of bits 31 to 20 and 7 to 0; the major device number is in bits 15 to 8.)                   
 ``` 
-* COMMAND
-* User
-Строка UID из cat /proc/<PID>/status
-Берем и  сравниваем со строками /etc/passwd
+### COMMAND
+### User
+* Строка UID из cat /proc/<PID>/status
+* Берем и  сравниваем со строками /etc/passwd
     
 ```
 [root@server vagrant]# cat /proc/649/status 
@@ -53,7 +53,7 @@ TracerPid:      0
 Uid:    0       0       0       0
 Gid:    0       0       0       0
 ```
-* Stat
+### Stat
 Строка State из cat /proc/$proc/status 
 
 
