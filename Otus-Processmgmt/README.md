@@ -36,8 +36,15 @@ man proc
                         The controlling terminal of the process.  (The minor device number is contained in the combination of bits 31 to 20 and 7 to 0; the major device number is in bits 15 to 8.)                   
 ``` 
 ### COMMAND
+* Параметр из cat /proc/[pid]/cmdline
+```
+[root@server vagrant]# cat /proc/649/cmdline
+/usr/lib/systemd/systemd-logind
+```
+ 
+
 ### User
-* Строка UID из cat /proc/<PID>/status
+* Строка UID из cat /proc/[pid]/status
 * Берем и  сравниваем со строками /etc/passwd
     
 ```
@@ -54,44 +61,12 @@ Uid:    0       0       0       0
 Gid:    0       0       0       0
 ```
 ### Stat
-Строка State из cat /proc/$proc/status 
+Строка State из cat /proc/[pid]/status 
 ```
 [root@server vagrant]# cat /proc/649/status 
 Name:   systemd-logind
 Umask:  0022
 State:  S (sleeping)
 ```
-
-
-
-```
-fmt="%-10s%-30s%-10s%-20s%-20s%-10s%-500s\n"
-printf "$fmt" PID NAME  TTY USERNAME  STAT RSS COMMAND
-for proc in `ls /proc/ | egrep "^[0-9]" | sort -n`
-do
-
-    if [[ -f /proc/$proc/status ]]
-        then
-        PID=$proc
-
-    if  [[ -f /proc/$proc/stat ]]
-        then
-    CMD=`cat /proc/$proc/cmdline  | tr '\0' '\n' 
-    else
-        CMD=`n\a`
-    fi
-
-    Name=`cat /proc/$proc/status | awk '/Name/{print $2}'`
-    TTY=`cat /proc/$proc/stat | rev | awk '{print $46}' | rev`
-    User=`awk '/Uid/{print $2}' /proc/$proc/status`
-    Stat=`cat /proc/$proc/status | awk '/State/{print $2}'`
-        if [[ User -eq 0 ]]
-       then
-       UserName='root'
-    else
-       UserName=`grep $User /etc/passwd | awk -F ":" '{print $1}'`
-    fi
-    printf "$fmt" $PID $Name $TTY $UserName $Stat $RSS "$CMD"
-    fi
-done
-```
+## Проблемы
+*
