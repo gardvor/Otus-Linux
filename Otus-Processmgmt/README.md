@@ -35,10 +35,9 @@ man proc
  (7) tty_nr  %d
                         The controlling terminal of the process.  (The minor device number is contained in the combination of bits 31 to 20 and 7 to 0; the major device number is in bits 15 to 8.)                   
 ``` 
-Например
+* User
+* Stat
 
-[root@server vagrant]# cat /proc/649/stat
-649 (systemd-logind) S 1 649 649 __0__ -1 4194560 1462 0 195 0 34 91 0 0 20 0 1 0 3065 98828288 574 18446744073709551615 94314495643648 94314495869010 140733281150400 0 0 0 16387 4096 0 1 0 0 17 0 0 0 14 0 0 94314497968208 94314497982480 94314513412096 140733281152735 140733281152767 140733281152767 140733281152984 0
 
 
 
