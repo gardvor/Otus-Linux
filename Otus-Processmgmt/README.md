@@ -34,6 +34,8 @@ man proc
 /proc/[pid]/stat
  (7) tty_nr  %d
                         The controlling terminal of the process.  (The minor device number is contained in the combination of bits 31 to 20 and 7 to 0; the major device number is in bits 15 to 8.)                   
+* В cat /proc/$proc/stat параметр {print $2} может быть пустым поэтому вместо {print $7 } берем {print $46} параметр с конца через двойной rev.
+
 ``` 
 ### COMMAND
 * Параметр из cat /proc/[pid]/cmdline
