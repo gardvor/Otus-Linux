@@ -55,8 +55,12 @@ Gid:    0       0       0       0
 ```
 ### Stat
 Строка State из cat /proc/$proc/status 
-
-
+```
+[root@server vagrant]# cat /proc/649/status 
+Name:   systemd-logind
+Umask:  0022
+State:  S (sleeping)
+```
 
 
 
