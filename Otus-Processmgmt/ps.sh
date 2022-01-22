@@ -1,6 +1,6 @@
 #!/bin/bash
 # Задаем формат таблицы
-fmt="%-10s%-30s%-10s%-20s%-20s%-500s\n"
+fmt="%-10s%-30s%-10s%-20s%-20s%-100s\n"
 printf "$fmt" PID NAME TTY USERNAME STAT COMMAND
 for proc in `ls /proc/ | egrep "^[0-9]" | sort -n`
 do
