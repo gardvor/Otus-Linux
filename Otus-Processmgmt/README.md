@@ -35,9 +35,26 @@ man proc
  (7) tty_nr  %d
                         The controlling terminal of the process.  (The minor device number is contained in the combination of bits 31 to 20 and 7 to 0; the major device number is in bits 15 to 8.)                   
 ``` 
+* COMMAND
 * User
+Строка UID из cat /proc/<PID>/status
+Берем и  сравниваем со строками /etc/passwd
+    
+```
+[root@server vagrant]# cat /proc/649/status 
+Name:   systemd-logind
+Umask:  0022
+State:  S (sleeping)
+Tgid:   649
+Ngid:   0
+Pid:    649
+PPid:   1
+TracerPid:      0
+Uid:    0       0       0       0
+Gid:    0       0       0       0
+```
 * Stat
-
+Строка State из cat /proc/$proc/status 
 
 
 
@@ -64,8 +81,7 @@ do
     TTY=`cat /proc/$proc/stat | rev | awk '{print $46}' | rev`
     User=`awk '/Uid/{print $2}' /proc/$proc/status`
     Stat=`cat /proc/$proc/status | awk '/State/{print $2}'`
-    RSS=`cat /proc/$proc/status | awk '/VmRSS/{print $2}'`
-    if [[ User -eq 0 ]]
+        if [[ User -eq 0 ]]
        then
        UserName='root'
     else
