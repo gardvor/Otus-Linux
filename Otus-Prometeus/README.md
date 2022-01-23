@@ -10,5 +10,7 @@ https://github.com/viveksatasiya/vagrant-prometheus-grafana
 * Стенд Prometeus + Grafana
 * Был настроен Дашборд
 
+![dashboard](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Prometeus/Screenshot.jpg)
+
 
 
