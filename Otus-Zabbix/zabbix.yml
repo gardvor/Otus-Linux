@@ -1,0 +1,40 @@
+  - hosts: zabbix
+    become: yes
+    pre_tasks:
+      - name: Install php-fpm on the server
+        apt:
+          name: php-fpm
+          state: present    
+    roles:
+      - role: geerlingguy.mysql
+        mysql_root_password: super-secure-password
+      - role: community.zabbix.zabbix_server
+        zabbix_server_database: mysql
+        zabbix_server_database_long: mysql
+        zabbix_server_dbport: 3306
+        zabbix_server_dbpassword: super-secure-password
+      - role: geerlingguy.apache
+      - role: community.zabbix.zabbix_web
+        zabbix_url: zabbix.otus.example
+        zabbix_server_database: mysql
+        zabbix_server_database_long: mysql
+        zabbix_server_dbport: 3306
+        zabbix_server_dbpassword: super-secure-password
+        zabbix_php_version: 7.2
+        zabbix_php_fpm_dir: /etc/php/7.2/fpm/pool.d
+      - role: community.zabbix.zabbix_agent
+        zabbix_agent_server: 192.168.50.11
+        zabbix_agent_serveractive: 192.168.50.11
+        zabbix_url: http://zabbix.otus.example
+        zabbix_api_use: true # use zabbix_api_create_hosts and/or zabbix_api_create_hostgroup from 0.8.0
+        zabbix_api_user: Admin
+        zabbix_api_pass: zabbix
+        zabbix_create_host: present
+        zabbix_host_groups:
+          - Linux Servers
+        zabbix_link_templates:
+          - Template OS Linux
+          - Apache APP Template
+        zabbix_macros:
+          - macro_key: apache_type
+            macro_value: reverse_proxy        

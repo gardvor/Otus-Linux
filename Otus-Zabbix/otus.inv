@@ -1,0 +1,12 @@
+[all:vars]
+ansible_connection=ssh
+ansible_user=vagrant
+ansible_ssh_pass=vagrant
+ansible_python_interpreter=/usr/bin/python3
+
+[zabbix]
+zabbix ansible_host=192.168.50.11
+[wordpress]
+web ansible_host=192.168.50.12
+
+

@@ -1,0 +1,42 @@
+vmname = "zabbix"
+vmname2 = "web"
+vmname3 = "ansible"
+$script = <<-'SCRIPT'
+pip3 install ansible
+SCRIPT
+
+Vagrant.configure(2) do |config|
+  config.vm.define vmname do |subconfig|
+    subconfig.vm.synced_folder "./", "/otus", type: 'virtualbox'
+    subconfig.vm.box = "bento/ubuntu-18.04"
+    subconfig.vm.hostname = vmname
+    subconfig.vm.network :private_network, ip: "192.168.50.11" 
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+      vb.cpus = "2" 
+    end
+  end
+  config.vm.define vmname2 do |subconfig|
+    subconfig.vm.synced_folder "./", "/otus", type: 'virtualbox'
+    subconfig.vm.box = "bento/ubuntu-18.04"
+    subconfig.vm.hostname = vmname2
+    subconfig.vm.network :private_network, ip: "192.168.50.12" 
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+      vb.cpus = "2" 
+    end
+  end  
+  config.vm.define vmname3 do |subconfig|
+    subconfig.vm.synced_folder "./", "/otus", type: 'virtualbox'
+    subconfig.vm.box = "mrg/ansible"
+    subconfig.vm.hostname = vmname3
+    subconfig.vm.network :private_network, ip: "192.168.50.13" 
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+      vb.cpus = "2" 
+    end
+    #subconfig.vm.provision "shell", inline: $script
+  end
+
+end
+
