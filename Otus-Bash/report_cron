@@ -1,1 +1,0 @@
-*/5 * * * * cd /vagrant && /bin/bash /vagrant/log-analyzer.sh /vagrant/access-4560-644067.log
