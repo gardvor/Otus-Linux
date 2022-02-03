@@ -15,7 +15,7 @@ Y запрашиваемых адресов (с наибольшим кол-во
 список всех кодов возврата с указанием их кол-ва с момента последнего запуска.
 В письме должно быть прописан обрабатываемый временной диапазон и должна быть реализована защита от мультизапуска.
 
-Скрипт [https://github.com/gardvor/Otus-Linux/blob/main/Otus-Bash/check_log.sh]
+Скрипт [check_log.sh](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Bash/check_log.sh)
 ```
 [root@server vagrant]# ps ax
     PID TTY      STAT   TIME COMMAND
