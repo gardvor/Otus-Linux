@@ -1,0 +1,49 @@
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+	config.vm.box = "centos/7"
+	config.vm.box_version = "2004.01"
+
+	config.vm.provider "virtualbox" do |v|
+	#v.customize ["createhd",  "--filename", "machine1_disk0", "--size", "2048"]
+	#v.customize ["storagectl", :id, "--name", "SATA Controller", "--add", "sata"]
+	#v.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", "1", "--type", "hdd", "--medium", "machine1_disk0.vdi"]
+	v.memory = 512
+	v.cpus = 1
+	end
+	
+	
+	config.vm.define "backup" do |backup|
+		backup.vm.network "private_network", ip: "192.168.11.160",
+		virtualbox__intnet: "net1"
+		backup.vm.hostname = "backup"
+		backup.vm.provider "virtualbox" do |backup_vb|
+			backup_vb.customize ["createhd",  "--filename", "machine1_disk0", "--size", "2048"]
+			backup_vb.customize ["storagectl", :id, "--name", "SATA Controller", "--add", "sata"]
+			backup_vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", "1", "--type", "hdd", "--medium", "machine1_disk0.vdi"]
+#		a_host.ssh.username = 'vagrant'
+#		a_host.ssh.password = 'vagrant'
+#  		a_host.ssh.keys_only = false
+		backup.vm.provision "shell", inline: <<-SHELL
+		yum install epel-release -y &&
+		yum install borgbackup -y
+		SHELL
+		end	
+	end
+
+
+	config.vm.define "client" do |client|
+		client.vm.network "private_network", ip: "192.168.11.150",
+		virtualbox__intnet: "net1"
+		client.vm.hostname = "client"
+#		config.ssh.username = 'vagrant'
+# 		config.ssh.password = 'vagrant'
+# 		config.ssh.keys_only = false
+		client.vm.provision "shell", inline: <<-SHELL
+		yum install epel-release -y &&
+		yum install borgbackup -y
+		SHELL
+	end
+
+end    
