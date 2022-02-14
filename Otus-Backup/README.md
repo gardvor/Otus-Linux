@@ -75,8 +75,66 @@ Number of key(s) added: 1
 Now try logging into the machine, with:   "ssh 'borg@192.168.11.160'"
 and check to make sure that only the key(s) you wanted were added.
 ``` 
+* Дальнейшие дествия будем вести на машине client
+```
+vagrant ssh client
+```
+* Иницилизируем репозиторий на сервере backup с машины client (для защиты задаём пароль "borg")
+```
+[root@client vagrant]#  borg init --encryption=repokey borg@192.168.11.160:/var/backup/
+Enter new passphrase: 
+Enter same passphrase again:
+Do you want your passphrase to be displayed for verification? [yN]: y
+Your passphrase (between double-quotes): "borg"
+Make sure the passphrase displayed above is exactly what you wanted.
+
+By default repositories initialized with this version will produce security
+errors if written to with an older version (up to and including Borg 1.0.8).
+
+If you want to use these older versions, you can disable the check by running:
+borg upgrade --disable-tam ssh://borg@192.168.11.160/var/backup
+
+See https://borgbackup.readthedocs.io/en/stable/changes.html#pre-1-0-9-manifest-spoofing-vulnerability for details about the security implications.
+
+IMPORTANT: you will need both KEY AND PASSPHRASE to access this repo!
+If you used a repokey mode, the key is stored in the repo, but you should back it up separately.
+Use "borg key export" to export the key, optionally in printable format.
+Write down the passphrase. Store both at safe place(s).
+```
+* Запускаем создание бэкапа папки /etc
+```
+[root@client vagrant]# borg create --stats --list borg@192.168.11.160:/var/backup/::"etc-{now:%Y-%m-%d_%H:%M:%S}" /etc
+```
+* Проверяем что получилось
+```
+[root@client vagrant]# borg list borg@192.168.11.160:/var/backup/
+Enter passphrase for key ssh://borg@192.168.11.160/var/backup: 
+etc-2022-02-14_15:41:18              Mon, 2022-02-14 15:41:23 [edc5216c5e8696493950a1a25f6bd16505f3bdebf82c950f78aaccbd6fa9afc0]
+```
+* Смотрим список файлов в бэкапе
+```
+borg list borg@192.168.11.160:/var/backup/::etc-2022-02-14_15:41:18
+```
+* Пробуем достать файл из бэкапа
+```
+[root@client vagrant]# borg extract borg@192.168.11.160:/var/backup/::etc-2022-02-14_15:41:18 etc/hostname
+Enter passphrase for key ssh://borg@192.168.11.160/var/backup: 
+[root@client vagrant]# ll
+total 0
+drwx------. 2 root root 22 Feb 14 15:46 etc
+[root@client vagrant]# ll ./etc/
+total 4
+-rw-r--r--. 1 root root 7 Feb 14 14:19 hostname
+```
 * 
 ```
 ssh-copy-id username@remote_host
 ```
-
+* 
+```
+ssh-copy-id username@remote_host
+```
+* 
+```
+ssh-copy-id username@remote_host
+```
