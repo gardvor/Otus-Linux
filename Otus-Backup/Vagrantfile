@@ -19,17 +19,17 @@ Vagrant.configure(2) do |config|
 		virtualbox__intnet: "net1"
 		backup.vm.hostname = "backup"
 		backup.vm.provider "virtualbox" do |backup_vb|
-			backup_vb.customize ["createhd",  "--filename", "machine1_disk0", "--size", "2048"]
+			backup_vb.customize ["createhd",  "--filename", "machine1_disk2", "--size", "2048"]
 			backup_vb.customize ["storagectl", :id, "--name", "SATA Controller", "--add", "sata"]
-			backup_vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", "1", "--type", "hdd", "--medium", "machine1_disk0.vdi"]
+			backup_vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", "1", "--type", "hdd", "--medium", "machine1_disk2.vdi"]
 #		a_host.ssh.username = 'vagrant'
 #		a_host.ssh.password = 'vagrant'
 #  		a_host.ssh.keys_only = false
 		backup.vm.provision "shell", inline: <<-SHELL
-		yum install epel-release -y &&
-		yum install borgbackup -y
+		sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		sudo systemctl restart sshd.service
 		SHELL
-		end	
+		end
 	end
 
 
@@ -41,9 +41,22 @@ Vagrant.configure(2) do |config|
 # 		config.ssh.password = 'vagrant'
 # 		config.ssh.keys_only = false
 		client.vm.provision "shell", inline: <<-SHELL
-		yum install epel-release -y &&
-		yum install borgbackup -y
+		sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		sudo systemctl restart sshd.service
 		SHELL
 	end
 
-end    
+	config.vm.define "ansible" do |ansible|
+		ansible.vm.network "private_network", ip: "192.168.11.170",
+		virtualbox__intnet: "net1"
+		ansible.vm.hostname = "ansible"
+#		config.ssh.username = 'vagrant'
+# 		config.ssh.password = 'vagrant'
+# 		config.ssh.keys_only = false
+		ansible.vm.provision "shell", path: "ansible_install.sh"
+		ansible.vm.provision "shell", inline: <<-SHELL
+		sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		sudo systemctl restart sshd.service
+		SHELL
+	end	
+end  

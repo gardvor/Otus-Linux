@@ -1,0 +1,20 @@
+---
+- hosts: "all"
+  gather_facts: false
+  become: true
+
+
+
+  tasks:
+     - name: "Ping server"
+       ping:
+     - name: "Install epel-release" 
+       yum:
+          name:
+            - epel-release
+          state: present  
+     - name: "Install borgbackup"
+       yum:
+          name:
+            - borgbackup
+          state: present
