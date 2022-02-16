@@ -172,3 +172,12 @@ WantedBy=timers.target
 systemctl enable borg-backup.timer
 systemctl start borg-backup.timer
 ```
+* Проверяем репозиторий
+```
+[root@client vagrant]# borg list borg@192.168.11.160:/var/backup/
+Enter passphrase for key ssh://borg@192.168.11.160/var/backup: 
+etc-2022-0bb195bd9d7f96438b8141d11a49cc56-14_client:58:10 Mon, 2022-02-14 23:58:11 [e57008df8c96b1cdde38a6bf1f35789ee5b34d9e17e56d069635ff6925b2fbdc]
+"etc-2022-0bb195bd9d7f96438b8141d11a49cc56-15_client:58:10" Tue, 2022-02-15 20:58:11 [5d586c5fd3101d2beb2fabf34c3c5c85b5782684b7671c1921111804a15d580b]
+etc-2022-0bb195bd9d7f96438b8141d11a49cc56-16_client:54:38 Wed, 2022-02-16 15:54:39 [7d6d00b00493472ccfd1f50594295b1bfe457085dce71f812306ea6cc971f7d6]
+```
+* Есть проблема с распознаванием регулярного выражения {now:%Y-%m-%d_%H:%M:%S} в при запуске borg-backup.service, почему то в некорректно его отрабатывает. Из командной строки все нормально. Пока не разобрался.
