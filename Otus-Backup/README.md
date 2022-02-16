@@ -126,15 +126,49 @@ drwx------. 2 root root 22 Feb 14 15:46 etc
 total 4
 -rw-r--r--. 1 root root 7 Feb 14 14:19 hostname
 ```
-* 
+* Автоматизируем бэкапы, создаем borg-backup.service
 ```
-ssh-copy-id username@remote_host
+nano /etc/systemd/system/borg-backup.service
 ```
-* 
 ```
-ssh-copy-id username@remote_host
+[Unit]
+Description=Borg Backup
+
+[Service]
+Type=oneshot
+
+# Парольная фраза
+Environment="BORG_PASSPHRASE=borg"
+# Репозиторий
+Environment=REPO=borg@192.168.11.160:/var/backup/
+# Что бэкапим
+Environment=BACKUP_TARGET=/etc
+# Создание бэкапа
+ExecStart=/bin/borg create ${REPO}::{hostname}-{user}-{now:%Y-%m-%d_%H:%M:%S} ${BACKUP_TARGET}
+# Проверка бэкапа
+ExecStart=/bin/borg check ${REPO}
+# Очистка старых бэкапов             
+ ExecStart=/bin/borg prune --keep-daily 90 --keep-monthly 12 --keep-yearly 1 ${REPO}
 ```
-* 
+* Создаем borg-backup.timer
 ```
-ssh-copy-id username@remote_host
+nano /etc/systemd/system/borg-backup.timer 
+```
+```
+[Unit]
+Description=Borg Backup
+Requires=borg-backup.service
+
+[Timer]
+Unit=borg-backup.service
+OnUnitActiveSec=5min
+
+
+[Install]
+WantedBy=timers.target
+```
+* Запускаем задачу
+```
+systemctl enable borg-backup.timer
+systemctl start borg-backup.timer
 ```
