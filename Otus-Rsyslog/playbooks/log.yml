@@ -1,0 +1,62 @@
+- hosts: "log"
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: "Ping server"
+      ping:
+    - name: "Install Chrony" 
+      yum:
+          name:
+            - chrony
+          state: present
+
+    - name: "Enable chronyd"
+      systemd:
+          state: started
+          name: chronyd
+          enabled: yes
+
+    - name: "Set timezone to Europe/Moscow"
+      timezone:
+          name: Europe/Moscow 
+
+    - name: "Install nano" 
+      yum:
+          name:
+            - nano
+          state: present
+
+    - name: "Install epel-release" 
+      yum:
+          name:
+            - epel-release
+          state: present 
+
+    - name: "Install rsyslog" 
+      yum:
+          name:
+            - rsyslog
+          state: present 
+
+    - name: "Install Audit" 
+      yum:
+          name:
+            - audit
+          state: present 
+
+    - name: "Copy rsyslog.conf"
+      template:
+          src: /vagrant/templates/rsyslog.conf.j2
+          dest: /etc/rsyslog.conf
+
+    - name: "Copy auditd.conf"
+      template:
+          src: /vagrant/templates/auditd.conf.log.j2
+          dest: /etc/audit/auditd.conf      
+    
+    - name: "Restart rsyslog"
+      shell: service rsyslog restart
+
+    - name: "Restart auditd"
+      shell: service auditd restart

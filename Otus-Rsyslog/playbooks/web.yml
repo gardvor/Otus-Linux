@@ -1,0 +1,90 @@
+---
+- hosts: "web"
+  gather_facts: false
+  become: true
+
+
+
+
+  handlers:
+      - name: reload nginx
+        service:
+         name: nginx
+         state: reloaded
+
+  tasks:
+    - name: "Ping server"
+      ping:
+    - name: "Install Crony" 
+      yum:
+          name:
+            - chrony
+          state: present
+    - name: "Set timezone to Europe/Moscow"
+      timezone:
+          name: Europe/Moscow
+    - name: "Enable chronyd"
+      systemd:
+          state: restarted
+          name: chronyd
+          enabled: yes
+    - name: "Set timezone to Europe/Moscow"
+      timezone:
+          name: Europe/Moscow      
+    - name: "Install nano" 
+      yum:
+          name:
+            - nano
+          state: present
+    - name: "Install epel-release" 
+      yum:
+          name:
+            - epel-release
+          state: present 
+    - name: "Install nginx" 
+      yum:
+          name:
+            - nginx
+          state: present 
+    - name: "Nginx enable"
+      systemd:
+          state: started
+          name: nginx
+          enabled: yes
+    - name: "Install Audit" 
+      yum:
+          name:
+            - audit
+            - audispd-plugins
+          state: present 
+    
+    - name: "Copy nginx.conf"
+      template:
+          src: /vagrant/templates/nginx.conf.j2
+          dest: /etc/nginx/nginx.conf
+      notify:
+        - reload nginx
+
+    - name: "Copy audit.rules"
+      template:
+          src: /vagrant/templates/audit.rules.j2
+          dest: /etc/audit/rules.d/audit.rules
+ 
+    - name: "Copy auditd.conf"
+      template:
+          src: /vagrant/templates/auditd.conf.web.j2
+          dest: /etc/audit/auditd.conf
+  
+
+    - name: "Copy au-remote.conf"
+      template:
+          src: /vagrant/templates/au-remote.conf.j2
+          dest: /etc/audisp/plugins.d/au-remote.conf
+
+    - name: "Copy audisp-remote.conf"
+      template:
+          src: /vagrant/templates/audisp-remote.conf.j2
+          dest: /etc/audisp/audisp-remote.conf
+ 
+    - name: "Restart auditd"
+      shell: service auditd restart

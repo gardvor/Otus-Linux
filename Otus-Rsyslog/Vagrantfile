@@ -6,51 +6,53 @@ Vagrant.configure(2) do |config|
 	config.vm.box_version = "2004.01"
 
 	config.vm.provider "virtualbox" do |v|
+	#v.customize ["createhd",  "--filename", "machine1_disk0", "--size", "2048"]
+	#v.customize ["storagectl", :id, "--name", "SATA Controller", "--add", "sata"]
+	#v.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", "1", "--type", "hdd", "--medium", "machine1_disk0.vdi"]
 	v.memory = 512
 	v.cpus = 1
 	end
 	
 	
 	config.vm.define "web" do |web|
-		web.vm.network "private_network", ip: "192.168.50.10",
+		web.vm.network "private_network", ip: "192.168.11.160",
 		virtualbox__intnet: "net1"
 		web.vm.hostname = "web"
 #		a_host.ssh.username = 'vagrant'
 #		a_host.ssh.password = 'vagrant'
 #  		a_host.ssh.keys_only = false
 		web.vm.provision "shell", inline: <<-SHELL
-		sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
-		systemctl restart sshd.service
+		sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		sudo systemctl restart sshd.service
 		SHELL
-
+		
 	end
 
 
 	config.vm.define "log" do |log|
-		log.vm.network "private_network", ip: "192.168.50.11",
+		log.vm.network "private_network", ip: "192.168.11.150",
 		virtualbox__intnet: "net1"
 		log.vm.hostname = "log"
 #		config.ssh.username = 'vagrant'
 # 		config.ssh.password = 'vagrant'
 # 		config.ssh.keys_only = false
-        log.vm.provision "shell", inline: <<-SHELL
-		sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
-		systemctl restart sshd.service
+		log.vm.provision "shell", inline: <<-SHELL
+		sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		sudo systemctl restart sshd.service
 		SHELL
 	end
 
-    config.vm.define "elk" do |elk|
-		elk.vm.network "private_network", ip: "192.168.50.10",
+	config.vm.define "ansible" do |ansible|
+		ansible.vm.network "private_network", ip: "192.168.11.170",
 		virtualbox__intnet: "net1"
-		elk.vm.hostname = "elk"
-#		a_host.ssh.username = 'vagrant'
-#		a_host.ssh.password = 'vagrant'
-#  		a_host.ssh.keys_only = false
-        elk.vm.provision "shell", inline: <<-SHELL
-		sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
-		systemctl restart sshd.service
+		ansible.vm.hostname = "ansible"
+#		config.ssh.username = 'vagrant'
+# 		config.ssh.password = 'vagrant'
+# 		config.ssh.keys_only = false
+		ansible.vm.provision "shell", path: "ansible_install.sh"
+		ansible.vm.provision "shell", inline: <<-SHELL
+		sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+		sudo systemctl restart sshd.service
 		SHELL
-
-	end
-
-end    
+	end	
+end  
