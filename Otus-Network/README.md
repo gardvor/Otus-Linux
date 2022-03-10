@@ -64,19 +64,19 @@ Office2----/
 ### Найти свободные подсети
 Подсеть | Наименование подсети | Количество свободных IP | Broadcast адрес
 --- | --- | --- | ---
-192.168.2.0/26 | 192.168.2.0/26 | dev | 64 
-192.168.2.64/26 | 192.168.2.64/26 | test servers | 64 
-192.168.2.128/26| 192.168.2.128/26 | managers | 64 
-Сеть office1 | 192.168.2.192/26 | office hardware | 64 
-Сеть office2 | 192.168.1.0/25 | dev | 128 
-Сеть office2 | 192.168.1.128/26 | test servers | 64 
-Сеть office2 | 192.168.1.192/26 | office hardware | 64 
-Сеть central | 192.168.0.16/28 | undefined | 16 
-Сеть central | 192.168.0.128/25 | undefined | 128 
-Сеть central | 192.168.0.48/28 | undefined | 16 
-Сеть central | 192.168.0.0/28 | directors | 16 
-Сеть central | 192.168.0.32/28 | office hardware | 16 
-Сеть central | 192.168.0.64/26 | wifi | 64 
+192.168.2.0/26 | office1 - dev | 62 | 64 
+192.168.2.64/26 | office1 - test servers | 62 | 64 
+192.168.2.128/26 | office1 - managers | 62 | 64 
+192.168.2.192/26 | office1 - office hardware | 62 | 64 
+192.168.1.0/25 | office2 - dev | 126 | 128 
+192.168.1.128/26 | office2 - test servers | 62 | 64 
+192.168.1.192/26 | office2 - office hardware | 62 | 64 
+192.168.0.0/28 | central - directors | 14 |14 
+192.168.0.16/28 | central - free | 14 | 128 
+192.168.0.32/28 | central - office hardware | 14 | 16 
+192.168.0.48/28 | central - free | 14 | 16 
+192.168.0.64/26 | central - wifi | 62 | 16 
+192.168.0.128/25 | central - free | 126 | 64 
 
 
 
