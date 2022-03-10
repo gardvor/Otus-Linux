@@ -31,9 +31,10 @@
   * 192.168.0.32/28 - office hardware
   * 192.168.0.64/26 - wifi 
 
-``` Office1 ---\
-                 ----> Central --IRouter --> internet 
-    Office2----/ 
+``` 
+Office1 ---\
+             ----> Central --IRouter --> internet 
+Office2----/ 
 ``` 
 Итого должны получится следующие сервера:
 * inetRouter
