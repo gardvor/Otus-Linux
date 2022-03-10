@@ -1,0 +1,23 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+        - name: install nano and iptables
+          yum:
+            name:
+                - nano
+                - traceroute
+            state: present
+            update_cache: true
+          when: "'yum' in group_names"  
+
+        - name: install nano and iptables
+          apt:
+            name:
+                - nano
+                - traceroute
+            state: present
+            update_cache: true
+          when: "'apt' in group_names"

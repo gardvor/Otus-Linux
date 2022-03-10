@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+
+      - name: set up forward packages across routers
+        sysctl:
+          name: net.ipv4.conf.all.forwarding
+          value: '1'
+          state: present
+        when: "'routers' in group_names"

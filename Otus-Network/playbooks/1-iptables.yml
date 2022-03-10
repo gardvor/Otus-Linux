@@ -1,0 +1,30 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Set up NAT on inetRouter
+      block:
+        - name: install iptables
+          yum:
+            name:
+                - iptables
+                - iptables-services
+            state: present
+            update_cache: true
+
+        - name: copy iptables config
+          template:
+              src: /vagrant/templates/inetRouter/iptables.j2
+              dest: /etc/sysconfig/iptables
+              owner: root
+              group: root
+              mode: 0600
+
+#        - name: start and enable iptables service
+#          systemd:
+#              name: iptables
+#              state: restarted
+#              enabled: true
+      when: (ansible_hostname == "inetRouter")

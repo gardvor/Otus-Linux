@@ -1,0 +1,65 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+
+# Прописываем маршруты
+
+    - name: Copy route config to inetRouter
+      template:
+          src: /vagrant/templates/inetRouter/route-eth1
+          dest: /etc/sysconfig/network-scripts/route-eth1
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "inetRouter")
+
+    - name: Copy route config to centralRouter
+      template:
+          src: /vagrant/templates/centralRouter/{{item}}
+          dest: /etc/sysconfig/network-scripts/{{item}}
+          owner: root
+          group: root
+          mode: 0600
+      loop:
+         - route-eth5
+         - route-eth6    
+      when: (ansible_hostname == "centralRouter")  
+      
+    - name: Copy route config to office1Router
+      template:
+          src: /vagrant/templates/office1Router/50-vagrant.yaml
+          dest: /etc/netplan/50-vagrant.yaml
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office1Router")
+
+    - name: Copy route config to office1Server
+      template:
+          src: /vagrant/templates/office1Server/50-vagrant.yaml
+          dest: /etc/netplan/50-vagrant.yaml
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office1Server") 
+
+    - name: Copy route config to office2Router
+      template:
+          src: /vagrant/templates/office2Router/interfaces
+          dest: /etc/network/interfaces
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office2Router")   
+
+    - name: Copy route config to office2Server
+      template:
+          src: /vagrant/templates/office2Server/interfaces
+          dest: /etc/network/interfaces
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office2Server")  

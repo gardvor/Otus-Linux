@@ -1,0 +1,118 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Set up NAT on inetRouter
+      block:
+        - name: install iptables
+          yum:
+            name:
+                - iptables
+                - iptables-services
+            state: present
+            update_cache: true
+
+        - name: copy iptables config
+          template:
+              src: /vagrant/templates/inetRouter/iptables.j2
+              dest: /etc/sysconfig/iptables
+              owner: root
+              group: root
+              mode: 0600
+
+#        - name: start and enable iptables service
+#          service:
+#              name: iptables
+#              state: restarted
+#              enabled: true
+      when: (ansible_hostname == "inetRouter")
+
+    - name: set up forward packages across routers
+      sysctl:
+          name: net.ipv4.conf.all.forwarding
+          value: '1'
+          state: present
+      when: "'routers' in group_names"
+
+# echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+    - name: disable default route
+      lineinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+        line: DEFROUTE=no
+      when: (ansible_hostname == "centralRouter") or
+            (ansible_hostname == "centralServer")
+
+# echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+    - name: add default gateway for centralRouter
+      lineinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+        line: GATEWAY=192.168.255.1
+      when: (ansible_hostname == "centralRouter")
+
+# echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+    - name: add default gateway for centralServer
+      lineinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+        line: GATEWAY=192.168.0.1
+      when: (ansible_hostname == "centralServer")
+
+# Прописываем маршруты
+
+    - name: Copy route config to inetRouter
+      template:
+          src: /vagrant/templates/inetRouter/route-eth1
+          dest: /etc/sysconfig/network-scripts/route-eth1
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "inetRouter")
+
+    - name: Copy route config to centralRouter
+      template:
+          src: /vagrant/templates/centralRouter/{{item}}
+          dest: /etc/sysconfig/network-scripts/{{item}}
+          owner: root
+          group: root
+          mode: 0600
+      loop:
+         - route-eth5
+         - route-eth6    
+      when: (ansible_hostname == "centralRouter")  
+      
+    - name: Copy route config to office1Router
+      template:
+          src: /vagrant/templates/office1Router/50-vagrant.yaml
+          dest: /etc/netplan/50-vagrant.yaml
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office1Router")
+
+    - name: Copy route config to office1Server
+      template:
+          src: /vagrant/templates/office1Server/50-vagrant.yaml
+          dest: /etc/netplan/50-vagrant.yaml
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office1Server") 
+
+    - name: Copy route config to office2Router
+      template:
+          src: /vagrant/templates/office2Router/interfaces
+          dest: /etc/network/interfaces
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office2Router")   
+
+    - name: Copy route config to office2Server
+      template:
+          src: /vagrant/templates/office2Server/interfaces
+          dest: /etc/network/interfaces
+          owner: root
+          group: root
+          mode: 0600
+      when: (ansible_hostname == "office2Server")  
