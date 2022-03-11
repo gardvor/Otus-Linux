@@ -95,6 +95,20 @@ Office2----/
 
 ![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Scheme.jpg)
 
+* На основании схемы подготовим таблицу серверов 
+
+Сервер | Подсети | OS
+--- | --- | ---
+inetRouter | Default-NAT address Virtual Box | CentOS 7
+inetRouter | 192.168.255.1/30 | CentOS 7
+centralRouter | 192.168.255.2/30 | CentOS 7
+centralRouter | 192.168.0.1/28 | CentOS 7
+centralRouter | 192.168.0.33/28| CentOS 7
+centralRouter | 192.168.0.65/26 | CentOS 7
+centralRouter | 192.168.255.10/30 | CentOS 7
+centralRouter | 192.168.255.5/30 | CentOS 7
+
+
 
 
 
