@@ -213,3 +213,17 @@ vagrant ssh ansible
 ```
 * Он установит на всех Router-серверах параметр net.ipv4.ip_forward в значение 1
 
+### Отключение маршрута по умолчанию на интерфейсе eth0 на centralRouter и centralServer
+* Данную настройку будем проводить с помощью ansible, зайдем на vm ansible
+```
+vagrant ssh ansible
+```
+* Запустим подготовленный playbook
+```
+[vagrant@ansible ~]$ cd /vagrant
+[vagrant@ansible vagrant]$ ansible-playbook ./playbooks/3-def-routs.yml -i ./inventories/hosts
+```
+* Playbook отключит маршрут по умолчанию на интерфейсе vagrant eth0 и пропишет шлюз по умолчанию 192.168.0.1
+
+### Настройка маршрутизации на CentOS серверах
+
