@@ -122,6 +122,70 @@ office2Server| 192.168.1.2/26 | Debian 11
 * В репозитории представлен [Vagrantfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Vagrantfile) с добавленными по таблице интерфейсами.
 * Дальнейшая работа будет проводится со стендом собраным по этому [Vagrantfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Vagrantfile)
 
+### Настройка NAT
+* Заходим на сервер inetRouter
+```
+vagrant ssh inetRouter
+```
+* Устанавливае iptables
+```
+[root@inetRouter vagrant]# yum install iptables iptables-services -y
+```
+* Отключаем firewalld
+```
+[root@inetRouter vagrant]# systemctl stop firewalld
+[root@inetRouter vagrant]# systemctl disable firewalld
+```
+* Добавляем iptables в автозагрузку
+```
+[root@inetRouter vagrant]# systemctl enable iptables
+Created symlink from /etc/systemd/system/basic.target.wants/iptables.service to /usr/lib/systemd/system/iptables.service.
+```
+* Редактируем файл /etc/sysconfig/iptables приводим к следующему виду
+```
+# sample configuration for iptables service
+# you can edit this manually or use system-config-firewall
+# please do not ask us to add additional ports/services to this default configuration
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [37:2828]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+# Deny ping traffic
+#-A INPUT -j REJECT --reject-with icmp-host-prohibited
+#-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+*nat
+:PREROUTING ACCEPT [1:161]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
+COMMIT
+```
+* Следующие строки запрещают ping между хостами через данный сервер их надо закомментировать
+```
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+```
+* Запускаем и смотрим статус iptables
+```
+[root@inetRouter vagrant]# systemctl start iptables
+[root@inetRouter vagrant]# systemctl status iptables
+● iptables.service - IPv4 firewall with iptables
+   Loaded: loaded (/usr/lib/systemd/system/iptables.service; enabled; vendor preset: disabled)
+   Active: active (exited) since Fri 2022-03-11 14:43:12 UTC; 8s ago
+  Process: 23899 ExecStart=/usr/libexec/iptables/iptables.init start (code=exited, status=0/SUCCESS)
+ Main PID: 23899 (code=exited, status=0/SUCCESS)
+
+Mar 11 14:43:12 inetRouter systemd[1]: Starting IPv4 firewall with iptables...
+Mar 11 14:43:12 inetRouter iptables.init[23899]: iptables: Applying firewall rules: [  OK  ]
+Mar 11 14:43:12 inetRouter systemd[1]: Started IPv4 firewall with iptables.
+```
+
 
 
 
