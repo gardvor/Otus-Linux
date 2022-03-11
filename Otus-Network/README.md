@@ -92,6 +92,7 @@ Office2----/
 
 ## Практическая часть
 * Соединить офисы в сеть согласно схеме и настроить маршруты
+
 ![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Scheme.jpg)
 
 
