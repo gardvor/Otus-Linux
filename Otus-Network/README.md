@@ -124,6 +124,18 @@ office2Server| 192.168.1.2/26 | Debian 11
 
 * Для корректной работы Ansible надо на двух серверах office2Router и office2Server вручную поставить пароль "vagrant" для пользователя vagrant
 
+### Установка Traceroute на все сервера
+* Будем проводить с помощью Ansible
+```
+vagrant ssh ansible
+```
+* Запустим подготовленный playbook
+```
+[vagrant@ansible ~]$ cd /vagrant
+[vagrant@ansible vagrant]$ ansible-playbook ./playbooks/0-NanoTraceroute.yml -i ./inventories/hosts 
+```
+
+
 ### Настройка NAT
 * Заходим на сервер inetRouter
 ```
@@ -187,6 +199,7 @@ Mar 11 14:43:12 inetRouter systemd[1]: Starting IPv4 firewall with iptables...
 Mar 11 14:43:12 inetRouter iptables.init[23899]: iptables: Applying firewall rules: [  OK  ]
 Mar 11 14:43:12 inetRouter systemd[1]: Started IPv4 firewall with iptables.
 ```
+* Пробоав
 
 ### Маршрутизация транзитных пакетов (IP forward)
 * Данную настройку будем проводить с помощью ansible, зайдем на vm ansible
