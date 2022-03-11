@@ -95,7 +95,7 @@ Office2----/
 
 ![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Scheme.jpg)
 
-* На основании схемы подготовим таблицу серверов 
+* На основании схемы подготовим таблицу серверов с интерфейсами которые нужно на них настроить
 
 Сервер | Подсети | OS
 --- | --- | ---
@@ -105,8 +105,20 @@ centralRouter | 192.168.255.2/30 | CentOS 7
 centralRouter | 192.168.0.1/28 | CentOS 7
 centralRouter | 192.168.0.33/28| CentOS 7
 centralRouter | 192.168.0.65/26 | CentOS 7
-centralRouter | 192.168.255.10/30 | CentOS 7
+centralRouter | 192.168.255.9/30 | CentOS 7
 centralRouter | 192.168.255.5/30 | CentOS 7
+office1Router | 192.168.255.10/30 | Ubuntu 20
+office1Router | 192.168.2.1/26 | Ubuntu 20
+office1Router | 192.168.2.65/26 | Ubuntu 20
+office1Router | 192.168.2.129/26 | Ubuntu 20
+office1Router | 192.168.2.193/26 | Ubuntu 20
+office1Server | 192.168.2.130/26 | Ubuntu 20
+office2Router| 192.168.255.6/30 | Debian 11
+office2Router| 192.168.1.1/26 | Debian 11
+office2Router| 192.168.1.129/26 | Debian 11
+office2Router| 192.168.1.193/26 | Debian 11
+office2Server| 192.168.1.2/26 | Debian 11
+
 
 
 
