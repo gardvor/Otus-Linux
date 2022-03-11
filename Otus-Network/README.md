@@ -122,6 +122,8 @@ office2Server| 192.168.1.2/26 | Debian 11
 * В репозитории представлен [Vagrantfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Vagrantfile) с добавленными по таблице интерфейсами.
 * Дальнейшая работа будет проводится со стендом собраным по этому [Vagrantfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Vagrantfile)
 
+* Для корректной работы Ansible надо на двух серверах office2Router и office2Server вручную поставить пароль "vagrant" для пользователя vagrant
+
 ### Настройка NAT
 * Заходим на сервер inetRouter
 ```
@@ -186,7 +188,15 @@ Mar 11 14:43:12 inetRouter iptables.init[23899]: iptables: Applying firewall rul
 Mar 11 14:43:12 inetRouter systemd[1]: Started IPv4 firewall with iptables.
 ```
 
-
-
-
+### Маршрутизация транзитных пакетов (IP forward)
+* Данную настройку будем проводить с помощью ansible, зайдем на vm ansible
+```
+vagrant ssh ansible
+```
+* Запустим подготовленный playbook
+```
+[vagrant@ansible ~]$ cd /vagrant
+[vagrant@ansible vagrant]$ ansible-playbook ./playbooks/2-forwarding-on.yml -i ./inventories/hosts 
+```
+* Он установит на всех Router-серверах параметр net.ipv4.ip_forward в значение 1
 
