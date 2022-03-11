@@ -90,6 +90,10 @@ Office2----/
 192.168.0.128/25 | central - free | 126 | 192.168.0.255
 
 
+## Практическая часть
+
+[Схема] (https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Scheme.svg)
+
 
 
 
