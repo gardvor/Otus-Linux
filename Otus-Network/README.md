@@ -119,8 +119,8 @@ office2Router| 192.168.1.129/26 | Debian 11
 office2Router| 192.168.1.193/26 | Debian 11
 office2Server| 192.168.1.2/26 | Debian 11
 
-* В изначальный Vagrantfile скачаный по ссылке https://github.com/erlong15/otus-linux/tree/network вносим изменения добавляя нужные интерфейсы для серверов
-
+* В репозитории представлен [Vagrantfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Vagrantfile) с добавленными по таблице интерфейсами.
+* Дальнейшая работа будет проводится со стендом собраным по этому [Vagrantfile](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Vagrantfile)
 
 
 
