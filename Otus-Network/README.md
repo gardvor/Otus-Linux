@@ -199,7 +199,7 @@ Mar 11 14:43:12 inetRouter systemd[1]: Starting IPv4 firewall with iptables...
 Mar 11 14:43:12 inetRouter iptables.init[23899]: iptables: Applying firewall rules: [  OK  ]
 Mar 11 14:43:12 inetRouter systemd[1]: Started IPv4 firewall with iptables.
 ```
-* Пробоав
+* Пробовал сделать настройку через плейбук, почему то после копирования файла настроек не стартовал iptables. Буду разбираться.
 
 ### Маршрутизация транзитных пакетов (IP forward)
 * Данную настройку будем проводить с помощью ansible, зайдем на vm ansible
