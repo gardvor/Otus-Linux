@@ -92,7 +92,7 @@ Office2----/
 
 ## Практическая часть
 
-![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Scheme.png)
+![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Scheme.svg)
 
 
 
