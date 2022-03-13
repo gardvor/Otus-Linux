@@ -273,3 +273,29 @@ vagrant ssh inetRouter
 ```
 [root@inetRouter vagrant]# systemctl restart network
 ```
+
+### Настройка маршрутизации на Ubuntu серверах
+#### office1Server
+* В Ubuntu все настраивается через конфигурационныt файлы лежащие в каталоге /etc/netplan
+```
+vagrant ssh office1Server
+vagrant@office1Server:~$ sudo su
+root@office1Server:/home/vagrant# nano /etc/netplan/50-vagrant.yaml
+```
+* приводим файл к виду
+```
+---
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s8:
+      addresses:
+      - 192.168.2.130/26
+      routes:
+      - to: 0.0.0.0/0
+        via: 192.168.2.129
+    enp0s19:
+      addresses:
+      - 192.168.50.21/24
+```
