@@ -255,8 +255,10 @@ vagrant ssh centralRouter
 ```
 [root@centralRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth5
 192.168.1.0/24 via 192.168.255.6
+192.168.255.4/30 via 192.168.255.6
 [root@centralRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth6
 192.168.2.0/24 via 192.168.255.10
+192.168.255.8/30 via 192.168.255.10
 ```
 * Перезапустим сеть
 ```
@@ -268,6 +270,8 @@ vagrant ssh centralRouter
 vagrant ssh inetRouter
 [root@inetRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth1
 192.168.0.0/22 via 192.168.255.2
+192.168.255.8/30 via 192.168.255.2
+192.168.255.4/30 via 192.168.255.2
 ```
 * Перезапустим сеть
 ```
@@ -298,4 +302,49 @@ network:
     enp0s19:
       addresses:
       - 192.168.50.21/24
+```
+* Применим изменения
+```
+root@office1Server:/home/vagrant# netplan apply
+root@office1Server:/home/vagrant# netplan try
+```
+#### office1Router
+```
+vagrant ssh office1Router
+vagrant@office1Router:~$ sudo su
+root@office1Router:/home/vagrant# nano /etc/netplan/50-vagrant.yaml 
+```
+* приводим файл к виду
+```
+---
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s8:
+      addresses:
+      - 192.168.255.10/30
+      routes:
+      - to: 0.0.0.0/0
+        via: 192.168.255.9
+    enp0s9:
+      addresses:
+      - 192.168.2.1/26
+    enp0s10:
+      addresses:
+      - 192.168.2.65/26
+    enp0s16:
+      addresses:
+      - 192.168.2.129/26
+    enp0s17:
+      addresses:
+      - 192.168.2.193/26
+    enp0s19:
+      addresses:
+      - 192.168.50.20/24
+```      
+* Применим изменения
+```
+root@office1Router:/home/vagrant# netplan apply
+root@office1Router:/home/vagrant# netplan try
 ```
