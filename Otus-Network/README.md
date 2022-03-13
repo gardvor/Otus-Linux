@@ -226,4 +226,19 @@ vagrant ssh ansible
 * Playbook отключит маршрут по умолчанию на интерфейсе vagrant eth0 и пропишет шлюз по умолчанию 192.168.0.1
 
 ### Настройка маршрутизации на CentOS серверах
+#### centralServer
+* Добавляем маршрут для интерфейса eth1
+```
+vagrant ssh centralServer
+[vagrant@centralServer ~]$ sudo su
+[root@centralServer vagrant]# nano /etc/sysconfig/network-scripts/route-eth1
+0.0.0.0/0 via 192.168.0.1
+```
+* Создаем пустой файл /etc/sysconfig/network-scripts/route-eth0 что бы убрать маршрут по умолчанию через 10.0.2.2
+```
+[root@centralServer vagrant]# nano /etc/sysconfig/network-scripts/route-eth0
+```
+
+#### centralRouter
+
 
