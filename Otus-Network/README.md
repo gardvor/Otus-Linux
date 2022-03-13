@@ -240,5 +240,18 @@ vagrant ssh centralServer
 ```
 
 #### centralRouter
-
-
+* Добавляем маршруты для eth1
+```
+vagrant ssh centralRouter
+[root@centralRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth1
+192.168.0.0/22 via 192.168.255.1
+192.168.255.4/30 via 192.168.255.1
+192.168.255.8./30 via 192.168.255.1
+```
+* Добавим обратные маршруты
+```
+[root@centralRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth5
+192.168.1.0/24 via 192.168.255.6
+[root@centralRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth6
+192.168.2.0/24 via 192.168.255.10
+```
