@@ -251,7 +251,7 @@ vagrant ssh centralRouter
 192.168.255.4/30 via 192.168.255.1
 192.168.255.8./30 via 192.168.255.1
 ```
-* Добавим обратные маршруты
+* Добавим обратные маршруты для интерфейсов eth5 и eth6 
 ```
 [root@centralRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth5
 192.168.1.0/24 via 192.168.255.6
@@ -263,7 +263,7 @@ vagrant ssh centralRouter
 [root@centralRouter vagrant]# systemctl restart network
 ```
 #### inetRouter
-* Добавим обратный маршрут
+* Добавим обратный маршрут для интерфейса eth1
 ```
 vagrant ssh inetRouter
 [root@inetRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth1
