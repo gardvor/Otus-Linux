@@ -93,7 +93,7 @@ Office2----/
 ## Практическая часть
 * Соединить офисы в сеть согласно схеме и настроить маршруты
 
-![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Scheme.jpg)
+![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Network/Theory/Untitled%20Diagram.drawio.png)
 
 * На основании схемы подготовим таблицу серверов с интерфейсами которые нужно на них настроить
 
