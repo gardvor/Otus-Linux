@@ -506,3 +506,56 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
  4  * * *
  5  * * *
  ```
+* Traceroute office1Server -> centralServer
+```
+root@office1Server:/home/vagrant# traceroute 192.168.0.2
+traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
+ 1  _gateway (192.168.2.129)  1.003 ms  0.782 ms  0.606 ms
+ 2  192.168.255.9 (192.168.255.9)  1.349 ms  1.974 ms  7.080 ms
+ 3  192.168.0.2 (192.168.0.2)  11.962 ms  11.656 ms  10.865 ms
+ ```
+ * Traceroute office1Server -> office2Server
+```
+root@office1Server:/home/vagrant# traceroute 192.168.1.2
+traceroute to 192.168.1.2 (192.168.1.2), 30 hops max, 60 byte packets
+ 1  _gateway (192.168.2.129)  0.890 ms  2.150 ms  1.254 ms
+ 2  192.168.255.9 (192.168.255.9)  2.647 ms  2.969 ms  6.067 ms
+ 3  192.168.255.6 (192.168.255.6)  11.376 ms  11.091 ms  10.806 ms
+ 4  192.168.1.2 (192.168.1.2)  10.523 ms  10.518 ms  10.133 ms
+ ```
+ * Ping office2Server -> 8.8.8.8
+ ```
+ root@office2Server:/home/vagrant# ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=106 time=10.4 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=106 time=11.4 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=106 time=13.6 ms
+```
+ * Traceroute office2Server -> 8.8.8.8
+ ```
+ root@office2Server:/home/vagrant# traceroute 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
+ 1  192.168.1.1 (192.168.1.1)  0.909 ms  0.825 ms  0.872 ms
+ 2  192.168.255.5 (192.168.255.5)  3.770 ms  11.813 ms  11.503 ms
+ 3  192.168.255.1 (192.168.255.1)  11.199 ms  10.897 ms  10.582 ms
+ 4  * * *
+ 5  * * *
+ ```
+  * Traceroute office2Server -> centralServer
+ ```
+root@office2Server:/home/vagrant# traceroute 192.168.0.2
+traceroute to 192.168.0.2 (192.168.0.2), 30 hops max, 60 byte packets
+ 1  192.168.1.1 (192.168.1.1)  3.035 ms  2.699 ms  2.095 ms
+ 2  192.168.255.5 (192.168.255.5)  12.283 ms  12.115 ms  12.026 ms
+ 3  192.168.0.2 (192.168.0.2)  11.951 ms  11.879 ms  11.805 ms
+ ```
+ * Traceroute office2Server -> office2Server
+ ```
+ root@office2Server:/home/vagrant# traceroute 192.168.2.130
+traceroute to 192.168.2.130 (192.168.2.130), 30 hops max, 60 byte packets
+ 1  192.168.1.1 (192.168.1.1)  0.776 ms  2.175 ms  1.556 ms
+ 2  192.168.255.5 (192.168.255.5)  7.742 ms  7.365 ms  7.037 ms
+ 3  192.168.255.10 (192.168.255.10)  7.688 ms  7.119 ms  6.740 ms
+ 4  192.168.2.130 (192.168.2.130)  6.127 ms  4.829 ms  4.141 ms
+ ```
+ 
