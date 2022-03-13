@@ -452,3 +452,57 @@ iface eth5 inet static
       netmask 255.255.255.0
 #VAGRANT-END
 ```
+
+
+## Проверка
+
+* Ping centralServer -> 8.8.8.8
+```
+[vagrant@centralServer ~]$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=107 time=9.14 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=107 time=10.7 ms
+```
+* Traceroute centralServer -> 8.8.8.8
+```
+[vagrant@centralServer ~]$ traceroute 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
+ 1  gateway (192.168.0.1)  0.757 ms  0.480 ms  0.353 ms
+ 2  192.168.255.1 (192.168.255.1)  3.118 ms  2.985 ms  3.030 ms
+ 3  * * *
+ 4  * * *
+```
+* Traceroute centralServer -> office1Server
+```
+[vagrant@centralServer ~]$ traceroute  192.168.2.130
+traceroute to 192.168.2.130 (192.168.2.130), 30 hops max, 60 byte packets
+ 1  gateway (192.168.0.1)  0.875 ms  0.538 ms  0.414 ms
+ 2  192.168.255.10 (192.168.255.10)  1.292 ms  1.155 ms  2.377 ms
+ 3  192.168.2.130 (192.168.2.130)  3.487 ms  6.213 ms  5.360 ms
+```
+* Traceroute centralServer -> office2Server
+```
+[vagrant@centralServer ~]$ traceroute  192.168.1.2
+traceroute to 192.168.1.2 (192.168.1.2), 30 hops max, 60 byte packets
+ 1  gateway (192.168.0.1)  0.898 ms  0.560 ms  1.019 ms
+ 2  192.168.255.6 (192.168.255.6)  9.192 ms  9.067 ms  8.497 ms
+ 3  192.168.1.2 (192.168.1.2)  8.376 ms  8.076 ms  7.562 ms
+```
+* Ping office1Server -> 8.8.8.8
+```
+root@office1Server:/home/vagrant# ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=106 time=10.2 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=106 time=15.6 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=106 time=17.7 ms
+```
+* Traceroute office1Server -> 8.8.8.8
+```
+root@office1Server:/home/vagrant# traceroute 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
+ 1  _gateway (192.168.2.129)  4.639 ms  0.960 ms  0.805 ms
+ 2  192.168.255.9 (192.168.255.9)  3.268 ms  2.241 ms  2.663 ms
+ 3  192.168.255.1 (192.168.255.1)  4.229 ms  5.257 ms  4.804 ms
+ 4  * * *
+ 5  * * *
+ ```
