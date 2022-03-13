@@ -280,7 +280,7 @@ vagrant ssh inetRouter
 
 ### Настройка маршрутизации на Ubuntu серверах
 #### office1Server
-* В Ubuntu все настраивается через конфигурационныt файлы лежащие в каталоге /etc/netplan
+* В Ubuntu все настраивается через конфигурационные файлы лежащие в каталоге /etc/netplan
 ```
 vagrant ssh office1Server
 vagrant@office1Server:~$ sudo su
@@ -348,3 +348,5 @@ network:
 root@office1Router:/home/vagrant# netplan apply
 root@office1Router:/home/vagrant# netplan try
 ```
+
+### Настройка маршрутизации на Debian серверах
