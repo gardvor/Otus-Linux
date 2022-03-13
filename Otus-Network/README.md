@@ -417,8 +417,7 @@ auto eth1
 iface eth1 inet static
       address 192.168.255.6
       netmask 255.255.255.252
-# default route
-up ip route add 0.0.0.0/0 via 192.168.255.5
+      gateway 192.168.255.5
 #VAGRANT-END
 
 #VAGRANT-BEGIN
