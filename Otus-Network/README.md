@@ -238,7 +238,10 @@ vagrant ssh centralServer
 ```
 [root@centralServer vagrant]# nano /etc/sysconfig/network-scripts/route-eth0
 ```
-
+* Перезапустим сеть
+```
+[vagrant@centralServer ~]$ systemctl restart network
+```
 #### centralRouter
 * Добавляем маршруты для eth1
 ```
@@ -254,4 +257,19 @@ vagrant ssh centralRouter
 192.168.1.0/24 via 192.168.255.6
 [root@centralRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth6
 192.168.2.0/24 via 192.168.255.10
+```
+* Перезапустим сеть
+```
+[root@centralRouter vagrant]# systemctl restart network
+```
+#### inetRouter
+* Добавим обратный маршрут
+```
+vagrant ssh inetRouter
+[root@inetRouter vagrant]# nano /etc/sysconfig/network-scripts/route-eth1
+192.168.0.0/22 via 192.168.255.2
+```
+* Перезапустим сеть
+```
+[root@inetRouter vagrant]# systemctl restart network
 ```
