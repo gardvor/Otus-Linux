@@ -1,0 +1,160 @@
+---
+- hosts: pxeserver
+  gather_facts: true
+  become: true
+
+  tasks:
+
+#sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-*
+      - name: set up repo
+        replace:
+          path: "{{ item }}"
+          regexp: 'mirrorlist'
+          replace: '#mirrorlist'
+        with_items:
+          - /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+          - /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
+
+
+      - name: set up repo
+        replace:
+          path: "{{ item }}"
+          regexp: '#baseurl=http://mirror.centos.org'
+          replace: 'baseurl=http://vault.centos.org'
+        with_items:
+          - /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+          - /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
+
+#Установка пакета httpd (дополнительно сразу ставятся все пакеты, которые потребуются в данном задании
+      - name: install softs on CentOS
+        yum:
+          name: 
+            - nano
+            - wget
+            - epel-release
+            - httpd
+            - tftp-server
+            - dhcp-server
+          state: present
+          update_cache: true
+
+#Скачивание образа CentOS-8.4.2105-x86_64-dvd1.iso
+#Скачиваться будет долго, размер файла больше 9 ГБ.
+#      - name: Download ISO image CentOS 8.4.2105
+#        get_url:
+#          url: http://mirror.sale-dedic.com/centos/8.4.2105/isos/x86_64/CentOS-8.4.2105-x86_64-dvd1.iso
+#          dest: ~/CentOS-8.4.2105-x86_64-dvd1.iso
+#          mode: '0755'
+
+#Создание каталога /iso и назначение прав 755
+
+      - name: Create ISO directory
+        file:
+          path: /iso
+          state: directory
+          mode: '0755'
+
+#Монтируем образ в каталог /mnt
+
+      - name: Mount ISO image
+        mount:
+          path: /mnt
+          src: /root/CentOS-8.4.2105-x86_64-dvd1.iso
+          fstype: iso9660
+          opts: ro,loop
+          state: mounted
+
+#Копируем все файлы из каталога /mnt в /iso
+      - name: copy ALL files from /mnt to /iso
+        copy:
+          src: /mnt/
+          dest: /iso
+          remote_src: yes
+          directory_mode: yes
+
+#Копируем конфгурационный файл pxeboot.conf (Файл должен быть предварительно создан в каталаге templates)
+      - name: set up httpd config
+        template:
+          src: pxeboot.conf
+          dest: /etc/httpd/conf.d/pxeboot.conf
+          owner: root
+          group: root
+          mode: 0640
+
+#Перезупускаем httpd и добавляем службу в автозагрузку
+
+      - name: restart httpd
+        service:
+          name: httpd
+          state: restarted
+          enabled: true
+
+#Создаём каталог /var/lib/tftpboot/pxelinux.cfg
+      - name: Create TFTP directory
+        file:
+          path: /var/lib/tftpboot/pxelinux.cfg
+          state: directory
+          mode: '0755'
+
+#Копируем файл-меню на сервер
+      - name: set up pxelinux
+        template:
+          src: default
+          dest: /var/lib/tftpboot/pxelinux.cfg/default
+          owner: root
+          group: root
+          mode: 0644
+
+#Извлекаем файлы из RPM-пакета
+      - name: extract packages syslinux
+        shell: rpm2cpio /iso/BaseOS/Packages/syslinux-tftpboot-6.04-5.el8.noarch.rpm | cpio -dimv
+
+#Копируем файлы в каталог /var/lib/tftpboot/
+      - name: copy files to TFTP share
+        copy:
+          src: /home/vagrant/tftpboot/{{ item }}
+          dest: /var/lib/tftpboot/{{ item }}
+          mode: '0644'
+          remote_src: true
+        with_items:
+          - pxelinux.0
+          - ldlinux.c32
+          - libmenu.c32
+          - libutil.c32
+          - menu.c32
+          - vesamenu.c32
+
+#Копируем файлы в каталог /var/lib/tftpboot/
+      - name: copy initrd and vmlinuz files to TFTP share
+        copy:
+          src: /iso/images/pxeboot/{{ item }}
+          dest: /var/lib/tftpboot/{{ item }}
+          mode: '0755'
+          remote_src: true
+        with_items:
+          - initrd.img
+          - vmlinuz
+
+#Перезапускаем TFTP-сервер и добавляем его в автозагрузку
+      - name: restart tftp-server
+        service:
+          name: tftp.service
+          state: restarted
+          enabled: true
+      
+#Копирование файла конфигурации DHCP-сервера
+      - name: set up dhcp-server
+        template:
+          src: dhcpd.conf
+          dest: /etc/dhcp/dhcpd.conf
+          mode: '0644'
+
+#Перезапуск службы и добавление в автозагрузку
+      - name: restart dhcp-server
+        service:
+          name: dhcpd
+          state: restarted
+          enabled: true
+
+
+
