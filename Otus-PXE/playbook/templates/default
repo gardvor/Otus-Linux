@@ -29,3 +29,12 @@ menu label ^ rescue installed system
 kernel /vmlinuz
 initrd /initrd.img
 append ip=enp0s3:dhcp inst.repo=http://10.0.0.20/centos8 rescue
+
+label 4
+menu label ^ Auto-install CentOS 8.4
+#Загрузка данного варианта по умолчанию
+menu default
+kernel /vmlinuz
+initrd /initrd.img
+append ip=enp0s3:dhcp inst.ks=http://10.0.0.20/centos8/ks.cfg
+inst.repo=http://10.0.0.20/centos8/

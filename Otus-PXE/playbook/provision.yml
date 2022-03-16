@@ -156,5 +156,14 @@
           state: restarted
           enabled: true
 
+# добавляем kickstart-file на вебсервер
+      - name: copy ks.cfg
+        template:
+          src: ks.cfg
+          dest: /iso/ks.cfg
+          owner: root
+          group: root
+          mode: 0755   
+
 
 
