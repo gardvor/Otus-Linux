@@ -5,7 +5,7 @@
 
   tasks:
 
-#sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-*
+# Добавляем новый репозиторий взамен отключенного
       - name: set up repo
         replace:
           path: "{{ item }}"
@@ -26,7 +26,7 @@
           - /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
 
 #Установка пакета httpd (дополнительно сразу ставятся все пакеты, которые потребуются в данном задании
-      - name: install softs on CentOS
+      - name: install soft on CentOS
         yum:
           name: 
             - nano
@@ -40,11 +40,11 @@
 
 #Скачивание образа CentOS-8.4.2105-x86_64-dvd1.iso
 #Скачиваться будет долго, размер файла больше 9 ГБ.
-#      - name: Download ISO image CentOS 8.4.2105
-#        get_url:
-#          url: http://mirror.sale-dedic.com/centos/8.4.2105/isos/x86_64/CentOS-8.4.2105-x86_64-dvd1.iso
-#          dest: ~/CentOS-8.4.2105-x86_64-dvd1.iso
-#          mode: '0755'
+      - name: Download ISO image CentOS 8.4.2105
+        get_url:
+          url: http://mirror.sale-dedic.com/centos/8.4.2105/isos/x86_64/CentOS-8.4.2105-x86_64-dvd1.iso
+          dest: ~/CentOS-8.4.2105-x86_64-dvd1.iso
+          mode: '0755'
 
 #Создание каталога /iso и назначение прав 755
 
