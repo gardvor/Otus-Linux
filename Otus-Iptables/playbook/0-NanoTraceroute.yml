@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+        - name: install nano and traceroute
+          yum:
+            name:
+                - nano
+                - traceroute
+            state: present
+            update_cache: true
