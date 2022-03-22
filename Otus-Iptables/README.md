@@ -15,3 +15,7 @@
 4. пробросить 80й порт на inetRouter2 8080.
 5. дефолт в инет оставить через inetRouter. Формат сдачи ДЗ - vagrant + ansible
 * реализовать проход на 80й порт без маскарадинга
+
+## Выполнение домашнего задания
+* Командой Vagrant up развернется стенда построеный по схеме
+[Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Iptables/Scheme.svg)
