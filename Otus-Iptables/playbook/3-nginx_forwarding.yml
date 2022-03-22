@@ -13,6 +13,13 @@
         enabled: yes
       when: (ansible_hostname == "centralServer")
 
+    - name: Starting Iptables on inetRouter2
+      systemd:
+        name: iptables
+        state: started
+        enabled: yes 
+      when: (ansible_hostname == "inetRouter2")
+
     - name: add PREROUTING rule on inetRouter2
       iptables:
         action: append
