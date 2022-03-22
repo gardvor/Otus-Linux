@@ -91,3 +91,64 @@ traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
  2  * * *
  3  * * *
  ```
+## Проброс inetRouter порт 8080 на centralServer порт 80
+* Задание выполняется с помощью ansible
+```
+vagrant ssh ansible
+[root@ansible vagrant]# sudo su
+[root@ansible vagrant]# cd /vagrant
+[root@ansible vagrant]# ansible-playbook ./playbook/3-nginx_forwarding.yml -i ./inventory/hosts
+```
+* Плейбук запустит nginx на centralServer на 80 порту 
+```
+[vagrant@centralServer ~]$ systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2022-03-22 17:03:24 UTC; 50min ago
+  Process: 5331 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+  Process: 5328 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+  Process: 5327 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+ Main PID: 5333 (nginx)
+   CGroup: /system.slice/nginx.service
+           ├─5333 nginx: master process /usr/sbin/nginx
+           └─5336 nginx: worker process
+```
+* Запустит iptables на inetRouter2 и добавит правила для проброса портов
+* Вебсервер будет доступен на 8080 порту inetRouter2
+* проверим с машины ansible
+```
+[root@ansible vagrant]# curl http://192.168.50.11:8080
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Welcome to CentOS</title>
+  <style rel="stylesheet" type="text/css">
+
+        html {
+        background-image:url(img/html-background.png);
+        background-color: white;
+        font-family: "DejaVu Sans", "Liberation Sans", sans-serif;
+        font-size: 0.85em;
+        line-height: 1.25em;
+        margin: 0 4% 0 4%;
+        }
+```
+* Проверим с машины inetRouter
+```
+[root@inetRouter vagrant]# curl http://192.168.255.2:8080
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Welcome to CentOS</title>
+  <style rel="stylesheet" type="text/css">
+
+        html {
+        background-image:url(img/html-background.png);
+        background-color: white;
+        font-family: "DejaVu Sans", "Liberation Sans", sans-serif;
+        font-size: 0.85em;
+        line-height: 1.25em;
+        margin: 0 4% 0 4%;
+        }
+...
+```
