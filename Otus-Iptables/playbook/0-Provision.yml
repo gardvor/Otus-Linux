@@ -1,0 +1,69 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+        - name: install soft
+          yum:
+            name:
+                - nano
+                - traceroute
+                - nmap
+                - iptables
+                - iptables-services
+                - epel-release
+            state: present
+            update_cache: true
+        
+                
+        - name: install nginx on centralServer
+          yum:
+            name:
+                - nginx
+            state: present
+          when: (ansible_hostname == "centralServer")  
+
+        - name: set up forward packages across routers
+          sysctl:
+            name: net.ipv4.conf.all.forwarding
+            value: '1'
+            state: present  
+
+# Выключаем маршруты по умолчанию
+        - name: disable default route
+          lineinfile:
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+            line: DEFROUTE=no
+          when: (ansible_hostname == "centralRouter") or
+                (ansible_hostname == "centralServer") or
+                (ansible_hostname == "inetRouter2") 
+
+
+        - name: add default gateway for centralRouter
+          lineinfile:
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+            line: GATEWAY=192.168.255.1
+          when: (ansible_hostname == "centralRouter") or 
+                (ansible_hostname == "inetRouter2")
+
+
+        - name: add default gateway for centralServer
+          lineinfile:
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+            line: GATEWAY=192.168.0.1
+          when: (ansible_hostname == "centralServer")
+
+        - name: Copy route-eth1 to inetRouter
+          template:
+            src: /vagrant/templates/inetRouter/route-eth1   
+            dest: /etc/sysconfig/network-scripts/route-eth1
+            owner: root
+            group: root
+            mode: 0640
+          when: (ansible_hostname == "inetRouter")
+      
+        - name: Restart network
+          systemd:
+            state: restarted
+            name: network      

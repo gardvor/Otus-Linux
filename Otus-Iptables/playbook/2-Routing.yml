@@ -1,0 +1,44 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+
+# echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+    - name: disable default route
+      lineinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+        line: DEFROUTE=no
+      when: (ansible_hostname == "centralRouter") or
+            (ansible_hostname == "centralServer") or
+            (ansible_hostname == "inetRouter2") 
+
+# echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+    - name: add default gateway for centralRouter
+      lineinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+        line: GATEWAY=192.168.255.1
+      when: (ansible_hostname == "centralRouter") or 
+            (ansible_hostname == "inetRouter2")
+
+# echo "GATEWAY=192.168.0.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+    - name: add default gateway for centralServer
+      lineinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+        line: GATEWAY=192.168.0.1
+      when: (ansible_hostname == "centralServer")
+
+    - name: Copy route-eth1 to inetRouter
+      template:
+        src: /vagrant/templates/inetRouter/route-eth1   
+        dest: /etc/sysconfig/network-scripts/route-eth1
+        owner: root
+        group: root
+        mode: 0640
+      when: (ansible_hostname == "inetRouter")
+      
+    - name: Restart network
+      systemd:
+        state: restarted
+        name: network      

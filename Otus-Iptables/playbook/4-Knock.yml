@@ -1,0 +1,20 @@
+---
+- hosts: inetRouter
+  gather_facts: true
+  become: true
+
+  tasks:
+# Копируем файл iptables c настройка Knock port на inetRouter 
+      - name: Copy knock settings
+        template:
+          src: //inetRouter/iptables
+          dest: /etc/sysconfig/iptables
+          owner: root
+          group: root
+          mode: 0644
+
+      - name: Restart iptables
+        systemd:
+          name: iptables
+          state: restarted
+          enabled: yes     

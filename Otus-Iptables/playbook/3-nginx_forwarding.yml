@@ -1,0 +1,37 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+
+
+    - name: Starting Nginx 
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+      when: (ansible_hostname == "centralServer")
+
+    - name: add PREROUTING rule on inetRouter2
+      iptables:
+        action: append
+        table: nat
+        chain: PREROUTING
+        protocol: tcp
+        destination_port: 8080
+        to_destination: "192.168.255.10:80"
+        jump: DNAT
+      become: true  
+      when: (ansible_hostname == "inetRouter2")
+
+    - name: add POSTROUTING rule on inetRouter2 
+      iptables:
+        action: append
+        table: nat
+        chain: POSTROUTING
+        protocol: tcp
+        destination_port: 80
+        to_source: "192.168.255.9"
+        jump: SNAT
+      when: (ansible_hostname == "inetRouter2")
