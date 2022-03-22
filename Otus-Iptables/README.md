@@ -154,3 +154,97 @@ vagrant ssh ansible
 ```
 * Так же localhost:8080 на inetRouter2 проброшен на хостовую машину и доступен через браузер
 ![Screen](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Iptables/Screen.jpg)
+
+## Настраиваем Knocking port
+* На машине inetRouter
+```
+vagrant ssh inetRouter
+```
+* Файл /etc/sysconfig/iptables приводим к виду
+```
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:TRAFFIC - [0:0]
+:SSH-INPUT - [0:0]
+:SSH-INPUTTWO - [0:0]
+-A INPUT -j TRAFFIC
+-A TRAFFIC -p icmp --icmp-type any -j ACCEPT
+-A TRAFFIC -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
+-A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
+-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 9991 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
+-A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
+-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 7777 -m recent --rcheck --name SSH0 -j SSH-INPUT
+-A TRAFFIC -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
+-A TRAFFIC -m state --state NEW -m tcp -p tcp --dport 8881 -m recent --name SSH0 --set -j DROP
+-A SSH-INPUT -m recent --name SSH1 --set -j DROP
+-A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP
+-A TRAFFIC -j DROP
+COMMIT
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
+COMMIT
+```
+* Перезагружаем iptables
+```
+[root@inetRouter vagrant]# systemctl restart iptables
+```
+* Эти не дают подключиться inetRouter по ssh без запуска специального скрипта
+* Пробуем подключиться к inetRouter по ssh с CentralRouter
+```
+[vagrant@centralServer ~]$ ssh 192.168.255.1
+ssh: connect to host 192.168.255.1 port 22: Connection timed out
+```
+* Не дает подключиться, выкидывает по тайм ауту
+* Запускаем подготовленый knock.sh с нужными параметрами
+```
+[vagrant@centralRouter ~]$ sudo su
+[root@centralRouter vagrant]# cd /vagrant
+[root@centralRouter vagrant]# ./knock.sh 192.168.255.1 8881 7777 9991
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2022-03-22 18:12 UTC
+Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+Nmap scan report for 192.168.255.1
+Host is up (0.00055s latency).
+PORT     STATE    SERVICE
+8881/tcp filtered unknown
+MAC Address: 08:00:27:0E:F5:C3 (Cadmus Computer Systems)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.34 seconds
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2022-03-22 18:12 UTC
+Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+Nmap scan report for 192.168.255.1
+Host is up (0.0014s latency).
+PORT     STATE    SERVICE
+7777/tcp filtered cbt
+MAC Address: 08:00:27:0E:F5:C3 (Cadmus Computer Systems)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.35 seconds
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2022-03-22 18:12 UTC
+Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+Nmap scan report for 192.168.255.1
+Host is up (0.0012s latency).
+PORT     STATE    SERVICE
+9991/tcp filtered issa
+MAC Address: 08:00:27:0E:F5:C3 (Cadmus Computer Systems)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.35 seconds
+[root@centralRouter vagrant]# ssh 192.168.255.1
+The authenticity of host '192.168.255.1 (192.168.255.1)' can't be established.
+ECDSA key fingerprint is SHA256:O5aAbXmQfjyLo8TfkhPaES3hA2/uSYoq6rf52Xdffrk.
+ECDSA key fingerprint is MD5:cc:84:57:61:0a:07:b0:be:17:48:c1:98:1d:08:8f:4e.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.255.1' (ECDSA) to the list of known hosts.
+root@192.168.255.1's password: 
+Last login: Tue Mar 22 16:50:51 2022
+[root@inetRouter ~]# 
+```
+* Скрипт с помощью утилиты nmap последовательно бьется на указаные в аргументах порты, после чего на inetRouter открывается 30 секундное окно для входа по ssh
