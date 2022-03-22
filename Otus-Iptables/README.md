@@ -18,4 +18,4 @@
 
 ## Выполнение домашнего задания
 * Командой Vagrant up развернется стенда построеный по схеме
-[Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Iptables/Scheme.svg)
+![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Iptables/Scheme.svg)
