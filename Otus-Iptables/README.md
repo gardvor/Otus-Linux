@@ -152,3 +152,5 @@ vagrant ssh ansible
         }
 ...
 ```
+* Так же localhost:8080 на inetRouter2 проброшен на хостовую машину и доступен через браузер
+![Screen](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Iptables/Screen.jpg)
