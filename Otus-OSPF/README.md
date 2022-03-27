@@ -20,6 +20,8 @@
 ![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-OSPF/Scheme.png)
 
 
+
+### Настройка OSPF
 * Заходим на виртуальную машину ansible запускаем playbook provision.yml
 ```
 vagrant ssh ansible
