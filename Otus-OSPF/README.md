@@ -134,5 +134,5 @@ traceroute to 192.168.20.1 (192.168.20.1), 30 hops max, 60 byte packets
 [root@ansible vagrant]# ansible-playbook ./playbooks/assymetricRouting.yml 
 ```
 * И изменения переменной symmetric_routing:  в файле ../defaults/main.yml
-      * symmetric_routing: false - стоимость трафика на порт router1 enp0s8 выше чем на порт router2 enp0s8
-      * symmetric_routing: true - стомость трафика на эти порты одинаковая.
+   * symmetric_routing: false - стоимость трафика на порт router1 enp0s8 выше чем на порт router2 enp0s8
+   * symmetric_routing: true - стомость трафика на эти порты одинаковая.
