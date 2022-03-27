@@ -1,5 +1,5 @@
-# Otus-Iptables
-Домашнее задание OTUS Linux Professional по теме "Фильтрация трафика - firewalld, iptables"
+# Otus-OSPF
+Домашнее задание OTUS Linux Professional по теме "Статическая и динамическая маршрутизация, OSPF "
 
 ## Что требуется
 Работа выполнялась на стенде Windows 10, Hashicorp Vagrant 2.2.19, Oracle VirtualBox 6.3
@@ -8,17 +8,16 @@
 Скачать все файлы в одну директорию, из директории с vagrantfile выполнить команду Vagrant up
 
 ## Задание
-1. Реализовать knocking port
-* centralRouter может попасть на ssh inetrRouter через knock скрипт пример в материалах.)
-2. Добавить inetRouter2, который виден(маршрутизируется (host-only тип сети для виртуалки)) с хоста или форвардится порт через локалхост.
-3. Запустить nginx на centralServer.
-4. пробросить 80й порт на inetRouter2 8080.
-5. дефолт в инет оставить через inetRouter. Формат сдачи ДЗ - vagrant + ansible
-* реализовать проход на 80й порт без маскарадинга
+1. Поднять три виртуалки
+2. Объединить их разными lan
+3. Поднять OSPF между машинами на базе FRR;
+4. Изобразить ассиметричный роутинг;
+5. Сделать один из линков "дорогим", но что бы при этом роутинг был симметричным. 
+Формат сдачи: Vagrantfile + ansible
 
 ## Выполнение домашнего задания
 * Командой Vagrant up развернется стенда построеный по схеме
-![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-Iptables/Scheme.svg)
+![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-OSPF/Scheme.png)
 
 
 * Заходим на виртуальную машину ansible запускаем playbook provision.yml
