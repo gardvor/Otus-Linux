@@ -86,6 +86,7 @@ traceroute to 10.0.10.1 (10.0.10.1), 30 hops max, 60 byte packets
 traceroute to 10.0.11.1 (10.0.11.1), 30 hops max, 60 byte packets
  1  10.0.11.1 (10.0.11.1)  0.258 ms  0.231 ms  0.185 ms
 ```
+```
 traceroute to 10.0.12.1 (10.0.12.1), 30 hops max, 60 byte packets
  1  10.0.12.2 (10.0.12.2)  0.611 ms  0.583 ms  0.567 ms
  2  10.0.12.1 (10.0.12.1)  0.553 ms  0.429 ms  0.407 ms
