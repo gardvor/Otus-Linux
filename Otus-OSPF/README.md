@@ -36,7 +36,7 @@ vagrant ssh ansible
     * 10.0.11.0/30
     * 10.0.12.0/30
 
-#### router1
+#### Проверим доступность с router1
 ```
 root@router1:/home/vagrant# ping 192.168.10.1
 PING 192.168.10.1 (192.168.10.1) 56(84) bytes of data.
@@ -76,3 +76,38 @@ PING 10.0.12.1 (10.0.12.1) 56(84) bytes of data.
 64 bytes from 10.0.12.1: icmp_seq=1 ttl=64 time=0.025 ms
 64 bytes from 10.0.12.1: icmp_seq=2 ttl=64 time=0.174 ms
 ```
+#### Проверим трассировки с router2
+```
+root@router2:/home/vagrant# traceroute  10.0.10.1
+traceroute to 10.0.10.1 (10.0.10.1), 30 hops max, 60 byte packets
+ 1  10.0.10.1 (10.0.10.1)  0.372 ms  0.344 ms  0.329 ms
+```
+```
+traceroute to 10.0.11.1 (10.0.11.1), 30 hops max, 60 byte packets
+ 1  10.0.11.1 (10.0.11.1)  0.258 ms  0.231 ms  0.185 ms
+```
+traceroute to 10.0.12.1 (10.0.12.1), 30 hops max, 60 byte packets
+ 1  10.0.12.2 (10.0.12.2)  0.611 ms  0.583 ms  0.567 ms
+ 2  10.0.12.1 (10.0.12.1)  0.553 ms  0.429 ms  0.407 ms
+```
+root@router2:/home/vagrant# traceroute  192.168.10.1
+traceroute to 192.168.10.1 (192.168.10.1), 30 hops max, 60 byte packets
+ 1  192.168.10.1 (192.168.10.1)  0.269 ms  0.235 ms  0.219 ms
+```
+```
+root@router2:/home/vagrant# traceroute  192.168.20.1
+traceroute to 192.168.20.1 (192.168.20.1), 30 hops max, 60 byte packets
+ 1  router2 (192.168.20.1)  0.012 ms  0.003 ms  0.002 ms
+ ```
+ ```
+ root@router2:/home/vagrant# traceroute  192.168.30.1
+traceroute to 192.168.30.1 (192.168.30.1), 30 hops max, 60 byte packets
+ 1  192.168.30.1 (192.168.30.1)  0.554 ms  0.528 ms  0.517 ms
+```
+
+
+```
+```
+```
+```
+
