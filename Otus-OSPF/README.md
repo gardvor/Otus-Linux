@@ -91,6 +91,7 @@ traceroute to 10.0.12.1 (10.0.12.1), 30 hops max, 60 byte packets
  1  10.0.12.2 (10.0.12.2)  0.611 ms  0.583 ms  0.567 ms
  2  10.0.12.1 (10.0.12.1)  0.553 ms  0.429 ms  0.407 ms
 ```
+```
 root@router2:/home/vagrant# traceroute  192.168.10.1
 traceroute to 192.168.10.1 (192.168.10.1), 30 hops max, 60 byte packets
  1  192.168.10.1 (192.168.10.1)  0.269 ms  0.235 ms  0.219 ms
