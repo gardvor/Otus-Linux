@@ -106,10 +106,22 @@ traceroute to 192.168.20.1 (192.168.20.1), 30 hops max, 60 byte packets
 traceroute to 192.168.30.1 (192.168.30.1), 30 hops max, 60 byte packets
  1  192.168.30.1 (192.168.30.1)  0.554 ms  0.528 ms  0.517 ms
 ```
+#### Проверим изменние маршрутов при отключении одного из интерфейсов на router3
 
-
+* Посмотри трассировку до интерфейса enp0s10 router2
 ```
+root@router3:/home/vagrant# traceroute 192.168.20.1
+traceroute to 192.168.20.1 (192.168.20.1), 30 hops max, 60 byte packets
+ 1  192.168.20.1 (192.168.20.1)  0.322 ms  0.291 ms  0.276 ms
 ```
+* Отключим интерфейс enp0s8 на router3
 ```
+root@router3:/home/vagrant# ifconfig enp0s8 down
 ```
-
+* Проверим как изменился маршрут
+```
+traceroute to 192.168.20.1 (192.168.20.1), 30 hops max, 60 byte packets
+ 1  10.0.12.1 (10.0.12.1)  0.457 ms  0.416 ms  0.401 ms
+ 2  192.168.20.1 (192.168.20.1)  0.761 ms  0.746 ms  0.731 ms
+```
+* Траффик пошел в ообход, через router1
