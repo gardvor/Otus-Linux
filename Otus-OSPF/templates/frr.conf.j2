@@ -1,0 +1,65 @@
+# default to using syslog. /etc/rsyslog.d/45-frr.conf places the log in       
+# /var/log/frr/frr.log
+#
+# Note:
+# FRR's configuration shell, vtysh, dynamically edits the live, in-memory     
+# configuration while FRR is running. When instructed, vtysh will persist the 
+# live configuration to this file, overwriting its contents. If you want to   
+# avoid this, you can edit this file manually before starting FRR, or instruct
+# vtysh to write configuration to a different file.
+
+# Указание версии FRR
+frr version 8.1
+frr defaults traditional
+# Указываем имя машины
+hostname {{ ansible_hostname }}
+log syslog informational
+no ipv6 forwarding
+service integrated-vtysh-config
+#
+# Добавляем информацию об интерфейсе enp0s8
+interface enp0s8
+# Указываем описание интерфейса
+description r1-r2
+# Указываем ip-aдрес и маску (эту информацию мы получили в прошлом шаге)
+ip address {{ ens0s8_net }}
+# Указываем параметр игнорирования MTU
+ip ospf mtu-ignore
+# Если потребуется, можно указать «стоимость» интерфейса
+#ip ospf cost 1000
+# Указываем параметры hello-интервала для OSPF пакетов
+ip ospf hello-interval 10
+# Указываем параметры dead-интервала для OSPF пакетов
+#Должно быть кратно предыдущему значению
+ip ospf dead-interval 30
+#
+interface enp0s9
+description r1-r3
+ip address {{ ens0s9_net }}
+ip ospf mtu-ignore
+#ip ospf cost 45
+ip ospf hello-interval 10
+ip ospf dead-interval 30
+#
+interface enp0s10
+description net_router1
+ip address {{ ens0s10_net }}
+ip ospf mtu-ignore
+#ip ospf cost 45
+ip ospf hello-interval 10
+ip ospf dead-interval 30
+#
+#Начало настройки OSPF
+router ospf
+#Указываем router-id
+router-id 1.1.1.1
+#Указываем сети, которые хотим анонсировать соседним роутерам
+network {{ ens0s8_net }} area 0
+network {{ ens0s9_net }} area 0
+network {{ ens0s10_net }} area 0
+#Указываем адреса соседних роутеров
+neighbor {{ neighbor1 }}
+neighbor 10.0.12.2
+#Указываем адрес log-файла
+log file /var/log/frr/frr.log
+default-information originate always
