@@ -34,6 +34,45 @@ vagrant ssh ansible
     * 192.168.30.0/24
     * 10.0.10.0/30
     * 10.0.11.0/30
+    * 10.0.12.0/30
+
+#### router1
 ```
-vagrant ssh inetRouter
+root@router1:/home/vagrant# ping 192.168.10.1
+PING 192.168.10.1 (192.168.10.1) 56(84) bytes of data.
+64 bytes from 192.168.10.1: icmp_seq=1 ttl=64 time=0.011 ms
+64 bytes from 192.168.10.1: icmp_seq=2 ttl=64 time=0.020 ms
+```
+
+```
+root@router1:/home/vagrant# ping 192.168.20.1
+PING 192.168.20.1 (192.168.20.1) 56(84) bytes of data.
+64 bytes from 192.168.20.1: icmp_seq=1 ttl=64 time=0.344 ms
+64 bytes from 192.168.20.1: icmp_seq=2 ttl=64 time=0.653 ms
+```
+```
+root@router1:/home/vagrant# ping 192.168.30.1
+PING 192.168.30.1 (192.168.30.1) 56(84) bytes of data.
+64 bytes from 192.168.30.1: icmp_seq=1 ttl=64 time=0.324 ms
+64 bytes from 192.168.30.1: icmp_seq=2 ttl=64 time=0.352 ms
+64 bytes from 192.168.30.1: icmp_seq=3 ttl=64 time=1.01 ms
+```
+```
+root@router1:/home/vagrant# ping 10.0.10.1
+PING 10.0.10.1 (10.0.10.1) 56(84) bytes of data.
+64 bytes from 10.0.10.1: icmp_seq=1 ttl=64 time=0.013 ms
+64 bytes from 10.0.10.1: icmp_seq=2 ttl=64 time=0.026 ms
+```
+```
+root@router1:/home/vagrant# ping 10.0.11.1
+PING 10.0.11.1 (10.0.11.1) 56(84) bytes of data.
+64 bytes from 10.0.11.1: icmp_seq=1 ttl=63 time=0.391 ms
+64 bytes from 10.0.11.1: icmp_seq=2 ttl=63 time=1.85 ms
+
+```
+```
+root@router1:/home/vagrant# ping 10.0.12.1
+PING 10.0.12.1 (10.0.12.1) 56(84) bytes of data.
+64 bytes from 10.0.12.1: icmp_seq=1 ttl=64 time=0.025 ms
+64 bytes from 10.0.12.1: icmp_seq=2 ttl=64 time=0.174 ms
 ```
