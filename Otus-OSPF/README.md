@@ -144,7 +144,7 @@ PING 192.168.20.1 (192.168.20.1) from 192.168.10.1 : 56(84) bytes of data.
 64 bytes from 192.168.20.1: icmp_seq=2 ttl=251 time=2.45 ms
 64 bytes from 192.168.20.1: icmp_seq=3 ttl=251 time=2.80 ms
 ```
-* На router2 запускае просмотр icmp пакето в на порту enp0s9 и enp0s8
+* На router2 запускаем просмотр icmp пакето в на порту enp0s9 и enp0s8
 ```
 root@router2:/home/vagrant# tcpdump -i enp0s9
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
@@ -173,7 +173,14 @@ listening on enp0s8, link-type EN10MB (Ethernet), capture size 262144 bytes
 ```
 * Входящие и исходящие icmp пакеты ходят разными маршрутами потому что стоимость исходящего порта на router1 чем стоимость искходящего порта на router2
 #### Проверим симметричный роутинг - symmetric_routing: true
-Смотрим пакеты на тех же портах
+* На router1 запускаем пинг от 192.168.10.1 до 192.168.20.1: 
+```
+PING 192.168.20.1 (192.168.20.1) from 192.168.10.1 : 56(84) bytes of data.
+64 bytes from 192.168.20.1: icmp_seq=1 ttl=251 time=2.43 ms
+64 bytes from 192.168.20.1: icmp_seq=2 ttl=251 time=2.45 ms
+64 bytes from 192.168.20.1: icmp_seq=3 ttl=251 time=2.80 ms
+```
+* На router2 запускаем просмотр icmp пакето в на порту enp0s9 и enp0s8
 ```
 root@router2:/home/vagrant# tcpdump -i enp0s9
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
@@ -189,7 +196,7 @@ listening on enp0s9, link-type EN10MB (Ethernet), capture size 262144 bytes
 15:13:40.238917 IP 192.168.10.1 > router2: ICMP echo request, id 10, seq 455, length 64
 15:13:40.238945 IP router2 > 192.168.10.1: ICMP echo reply, id 10, seq 455, length 64
 ```
-* На enp0s9 ходят пакеты в обе стороны, хотя это не самы короткий маршрут.
+* На enp0s9 ходят пакеты в обе стороны, хотя это не самый короткий маршрут.
 ```
 root@router2:/home/vagrant# tcpdump -i enp0s8
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
