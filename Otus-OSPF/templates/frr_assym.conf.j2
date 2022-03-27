@@ -26,7 +26,14 @@ ip address {{ enp0s8_net }}
 # Указываем параметр игнорирования MTU
 ip ospf mtu-ignore
 # Если потребуется, можно указать «стоимость» интерфейса
-#ip ospf cost 1000
+{% if ansible_hostname == 'router1' %}
+ip ospf cost 1000
+{% elif ansible_hostname == 'router2' and symmetric_routing == true %}
+ip ospf cost 1000
+{% else %}
+#ip ospf cost 450
+{% endif %}
+
 # Указываем параметры hello-интервала для OSPF пакетов
 ip ospf hello-interval 10
 # Указываем параметры dead-интервала для OSPF пакетов

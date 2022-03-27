@@ -3,6 +3,6 @@ ansible_ssh_user=vagrant
 ansible_ssh_pass=vagrant
 
 [routers]
-router1 ansible_host=192.168.50.11 router_id=1.1.1.1 ens0s8_net="10.0.10.1/30" ens0s9_net="10.0.12.1/30" ens0s10_net="192.168.10.1/24" ens0s16_net="192.168.50.11/24" neighbor1="10.0.10.2" neighbor2="10.0.11.2"
-router2 ansible_host=192.168.50.12 router_id=2.2.2.2 ens0s8_net="10.0.10.2/30" ens0s9_net="10.0.11.2/30" ens0s10_net="192.168.20.1/24" ens0s16_net="192.168.50.12/24" neighbor1="10.0.10.2" neighbor2="10.0.11.2"
-router3 ansible_host=192.168.50.13 router_id=3.3.3.3 ens0s8_net="10.0.11.1/30" ens0s9_net="10.0.12.2/30" ens0s10_net="192.168.30.1/24" ens0s16_net="192.168.50.13/24" neighbor1="10.0.10.2" neighbor2="10.0.11.2"
+router1 ansible_host=192.168.50.11 router_id=1.1.1.1 enp0s8_net="10.0.10.1/30" enp0s9_net="10.0.12.1/30" enp0s10_net="192.168.10.1/24" enp0s16_net="192.168.50.11/24" neighbor1="10.0.10.2" neighbor2="10.0.11.2"
+router2 ansible_host=192.168.50.12 router_id=2.2.2.2 enp0s8_net="10.0.10.2/30" enp0s9_net="10.0.11.2/30" enp0s10_net="192.168.20.1/24" enp0s16_net="192.168.50.12/24" neighbor1="10.0.10.2" neighbor2="10.0.11.2"
+router3 ansible_host=192.168.50.13 router_id=3.3.3.3 enp0s8_net="10.0.11.1/30" enp0s9_net="10.0.12.2/30" enp0s10_net="192.168.30.1/24" enp0s16_net="192.168.50.13/24" neighbor1="10.0.10.2" neighbor2="10.0.11.2"

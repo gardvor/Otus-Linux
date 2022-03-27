@@ -3,6 +3,8 @@
   hosts: all
   gather_facts: true
   become: true
+  vars_files:
+    - /vagrant/defaults/main.yml
 
   tasks:
         - name: install soft
