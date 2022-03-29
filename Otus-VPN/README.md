@@ -1,5 +1,5 @@
-# OTUS - NFS, FUSE
-Домашнее задание OTUS Linux Professional по теме "NFS, FUSE"
+# OTUS - VPN
+Домашнее задание OTUS Linux Professional по теме "Мосты, туннели и VPN"
 
 ## Что требуется
 Требуется установленное програмное обеспечение
