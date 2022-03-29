@@ -8,7 +8,7 @@
 Скачать все файлы в одну директорию, из директории с vagrantfile выполнить команду Vagrant up
 
 ## Задание
-1.ежду двумя виртуалками поднять vpn в режимах
+1.Между двумя виртуалками поднять vpn в режимах
 * tun;
 * tap; 
 * Прочуствовать разницу.
@@ -21,6 +21,16 @@
 * server
 * client
 * ansible
+* Заходим на машину ansible и запускаем плейбук provision.yml он установить весь нужный софт и отключит selinux
+```
+vagrant ssh ansible
+[vagrant@ansible ~]$ sudo su
+[root@ansible vagrant]# cd /vagrant
+[root@ansible vagrant]# ansible-playbook ./playbooks/provision.yml 
+```
+### Проверка  VPN в TUN\TAP режимах
+
+
 
 
 
