@@ -282,6 +282,7 @@ init-pki complete; you may now create a CA or requests.
 Your newly created PKI dir is: /etc/openvpn/pki
 ```
 * Генерируем необходимые сертификаты
+* ca.crt
 ```
 [root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa build-ca nopass
 Using SSL: openssl OpenSSL 1.0.2k-fips  26 Jan 2017
@@ -302,6 +303,7 @@ CA creation complete and you may now import and sign cert requests.
 Your new CA certificate file for publishing is at:
 /etc/openvpn/pki/ca.crt
 ```
+* server.key
 ```
 [root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa gen-req server nopass
 Using SSL: openssl OpenSSL 1.0.2k-fips  26 Jan 2017
@@ -323,6 +325,7 @@ Keypair and certificate request completed. Your files are:
 req: /etc/openvpn/pki/reqs/server.req
 key: /etc/openvpn/pki/private/server.key
 ```
+* server.crt
 ```
 [root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa sign-req server server
 Using SSL: openssl OpenSSL 1.0.2k-fips  26 Jan 2017
