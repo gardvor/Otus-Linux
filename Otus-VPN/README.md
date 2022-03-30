@@ -267,6 +267,99 @@ Accepted connection from 10.10.10.2, port 56156
 Server listening on 5201
 -----------------------------------------------------------
 ```
-* Через TUN интерфейс скорость несколько больше, но не драматично.
+* Через TUN интерфейс скорость несколько больше, но не драматично. Я так понимаю через TAN интерфей получается L2 сеть, появляется много лишнего технического трафика.
 
 ### RAS на базе OpenVPN  с клиентскими сертификатами
+* на машине server переходим в папку /etc/openvpn/
+```
+[root@server vagrant]# cd /etc/openvpn/
+```
+* Инициализируем pki
+```
+[root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa init-pki
+
+init-pki complete; you may now create a CA or requests.
+Your newly created PKI dir is: /etc/openvpn/pki
+```
+* Генерируем необходимые сертификаты
+```
+[root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa build-ca nopass
+Using SSL: openssl OpenSSL 1.0.2k-fips  26 Jan 2017
+Generating RSA private key, 2048 bit long modulus
+...............+++
+..................+++
+e is 65537 (0x10001)
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Common Name (eg: your user, host, or server name) [Easy-RSA CA]:rasvpn
+
+CA creation complete and you may now import and sign cert requests.
+Your new CA certificate file for publishing is at:
+/etc/openvpn/pki/ca.crt
+```
+```
+[root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa gen-req server nopass
+Using SSL: openssl OpenSSL 1.0.2k-fips  26 Jan 2017
+Generating a 2048 bit RSA private key
+...................................................................................+++
+...+++
+writing new private key to '/etc/openvpn/pki/easy-rsa-1957.BWhKet/tmp.jtKoRh'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Common Name (eg: your user, host, or server name) [server]:rasvpn
+
+Keypair and certificate request completed. Your files are:
+req: /etc/openvpn/pki/reqs/server.req
+key: /etc/openvpn/pki/private/server.key
+```
+```
+[root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa sign-req server server
+Using SSL: openssl OpenSSL 1.0.2k-fips  26 Jan 2017
+
+
+You are about to sign the following certificate.
+Please check over the details shown below for accuracy. Note that this request
+has not been cryptographically verified. Please be sure it came from a trusted
+source or that you have verified the request checksum with the sender.
+
+Request subject, to be signed as a server certificate for 825 days:
+
+subject=
+    commonName                = rasvpn
+
+
+Type the word 'yes' to continue, or any other input to abort.
+  Confirm request details: yes
+Using configuration from /etc/openvpn/pki/easy-rsa-1983.to9moS/tmp.wNnDMN
+Check that the request matches the signature
+Signature ok
+The Subject's Distinguished Name is as follows
+commonName            :ASN.1 12:'rasvpn'
+Certificate is to be certified until Jul  2 08:26:08 2024 GMT (825 days)
+
+Write out database with 1 new entries
+Data Base Updated
+
+Certificate created at: /etc/openvpn/pki/issued/server.crt
+```
+```
+[root@server openvpn]# /usr/share/easy-rsa/3.0.8/easyrsa gen-dh
+Using SSL: openssl OpenSSL 1.0.2k-fips  26 Jan 2017
+Generating DH parameters, 2048 bit long safe prime, generator 2
+This is going to take a long time
+...........................................................................................+...........+....................................................................................................+............................................................................................+..+...........................................................................................................................................+..................................................................................................................................................+........+......................................................................................................+........................................................................................................................................................+..................................................................................................................................................+........................................................+..........................+...........................................................................................................................................................................................................................................................................................................................................................+................................+......................................................................+.....................................................................................+..................................................................................................................................................+..............................................................................................+.........................................................................................................................................++*++*
+
+DH parameters of size 2048 created at /etc/openvpn/pki/dh.pem
+```
+
