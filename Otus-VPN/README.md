@@ -423,3 +423,31 @@ Data Base Updated
 
 Certificate created at: /etc/openvpn/pki/issued/client.crt
 ```
+* Приведем файл /etc/openvpn/server.conf к виду
+```
+port 1207
+proto udp
+dev tun
+ca /etc/openvpn/pki/ca.crt
+cert /etc/openvpn/pki/issued/server.crt
+key /etc/openvpn/pki/private/server.key
+dh /etc/openvpn/pki/dh.pem
+server 10.10.10.0 255.255.255.0
+route 192.168.10.0 255.255.255.0
+push "route 192.168.10.0 255.255.255.0"
+ifconfig-pool-persist ipp.txt
+client-to-client
+client-config-dir /etc/openvpn/client
+keepalive 10 120
+comp-lzo
+persist-key
+persist-tun
+status /var/log/openvpn-status.log
+log /var/log/openvpn.log
+verb 3
+```
+* Задаём параметр iproute для клиента
+```
+echo 'iroute 192.168.33.0 255.255.255.0' > /etc/openvpn/client/client
+```
+
