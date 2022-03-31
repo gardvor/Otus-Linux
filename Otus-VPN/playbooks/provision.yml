@@ -6,9 +6,11 @@
 
   tasks:
         - name: Install epel-release
-            yum:
+          yum:
             name:
                 - epel-release
+            state: present
+            update_cache: true
         
         - name: install soft
           yum:
@@ -20,6 +22,15 @@
             state: present
             update_cache: true
         
+        - name: install easyrsa
+          yum:
+            name:
+                - easy-rsa
+            state: present
+            update_cache: true 
+          when: (ansible_hostname == "server")   
+
+
         - name: Disable selinux 
           selinux:
             state: disabled   
