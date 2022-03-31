@@ -433,8 +433,8 @@ cert /etc/openvpn/pki/issued/server.crt
 key /etc/openvpn/pki/private/server.key
 dh /etc/openvpn/pki/dh.pem
 server 10.10.10.0 255.255.255.0
-route 192.168.10.0 255.255.255.0
-push "route 192.168.10.0 255.255.255.0"
+route 10.10.10.0  255.255.255.0
+push "route 10.10.10.0 255.255.255.0"
 ifconfig-pool-persist ipp.txt
 client-to-client
 client-config-dir /etc/openvpn/client
@@ -448,6 +448,20 @@ verb 3
 ```
 * Задаём параметр iproute для клиента
 ```
-echo 'iroute 192.168.33.0 255.255.255.0' > /etc/openvpn/client/client
+echo 'iroute 192.168.0.0 255.255.255.0' > /etc/openvpn/client/client
 ```
+* Запускаем OpenVPN server
+```
+[root@server vagrant]# systemctl enable --now  openvpn@server
+```
+
+* На машину client в папку /etc/openvpn/client/ Копируем с server файлы
+   * /etc/openvpn/pki/ca.crt
+   * /etc/openvpn/pki/issued/client.crt
+   * /etc/openvpn/pki/private/client.key
+   
+
+
+
+
 
