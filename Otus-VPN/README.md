@@ -459,7 +459,96 @@ echo 'iroute 192.168.0.0 255.255.255.0' > /etc/openvpn/client/client
    * /etc/openvpn/pki/ca.crt
    * /etc/openvpn/pki/issued/client.crt
    * /etc/openvpn/pki/private/client.key
-   
+* Файл /etc/openvpn/client/client.conf приводим к виду
+```
+dev tun
+proto udp
+remote 192.168.10.10 1207
+client
+resolv-retry infinite
+ca /etc/openvpn/client/ca.crt
+cert /etc/openvpn/client/client.crt
+key /etc/openvpn/client/client.key
+persist-key
+persist-tun
+comp-lzo
+verb 3
+```
+* Запускаем подключение к OpenVPN server
+```
+[root@client vagrant]# openvpn --config /etc/openvpn/client/client.conf 
+Thu Mar 31 17:45:44 2022 WARNING: file '/etc/openvpn/client/client.key' is group or others accessible
+Thu Mar 31 17:45:44 2022 OpenVPN 2.4.12 x86_64-redhat-linux-gnu [Fedora EPEL patched] [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [PKCS11] [MH/PKTINFO] [AEAD] built on Mar 17 2022      
+Thu Mar 31 17:45:44 2022 library versions: OpenSSL 1.0.2k-fips  26 Jan 2017, LZO 2.06
+Thu Mar 31 17:45:44 2022 WARNING: No server certificate verification method has been enabled.  See http://openvpn.net/howto.html#mitm for more info.
+Thu Mar 31 17:45:44 2022 TCP/UDP: Preserving recently used remote address: [AF_INET]192.168.10.10:1207
+Thu Mar 31 17:45:44 2022 Socket Buffers: R=[212992->212992] S=[212992->212992]
+Thu Mar 31 17:45:44 2022 UDP link local (bound): [AF_INET][undef]:1194
+Thu Mar 31 17:45:44 2022 UDP link remote: [AF_INET]192.168.10.10:1207
+Thu Mar 31 17:45:44 2022 TLS: Initial packet from [AF_INET]192.168.10.10:1207, sid=b64957de 78c0fb94
+Thu Mar 31 17:45:44 2022 VERIFY OK: depth=1, CN=rasvpn
+Thu Mar 31 17:45:44 2022 VERIFY OK: depth=0, CN=rasvpn
+Thu Mar 31 17:45:44 2022 Control Channel: TLSv1.2, cipher TLSv1/SSLv3 ECDHE-RSA-AES256-GCM-SHA384, 2048 bit RSA
+Thu Mar 31 17:45:44 2022 [rasvpn] Peer Connection Initiated with [AF_INET]192.168.10.10:1207
+Thu Mar 31 17:45:45 2022 SENT CONTROL [rasvpn]: 'PUSH_REQUEST' (status=1)
+Thu Mar 31 17:45:45 2022 PUSH: Received control message: 'PUSH_REPLY,route 10.10.10.0 255.255.255.0,route 10.10.10.0 255.255.255.0,topology net30,ping 10,ping-restart 120,ifconfig 10.10.10.6 10.10.10.5,peer-id 0,cipher AES-256-GCM'
+Thu Mar 31 17:45:45 2022 OPTIONS IMPORT: timers and/or timeouts modified
+Thu Mar 31 17:45:45 2022 OPTIONS IMPORT: --ifconfig/up options modified
+Thu Mar 31 17:45:45 2022 OPTIONS IMPORT: route options modified
+Thu Mar 31 17:45:45 2022 OPTIONS IMPORT: peer-id set
+Thu Mar 31 17:45:45 2022 OPTIONS IMPORT: adjusting link_mtu to 1625
+Thu Mar 31 17:45:45 2022 OPTIONS IMPORT: data channel crypto options modified
+Thu Mar 31 17:45:45 2022 Data Channel: using negotiated cipher 'AES-256-GCM'
+Thu Mar 31 17:45:45 2022 Outgoing Data Channel: Cipher 'AES-256-GCM' initialized with 256 bit key
+Thu Mar 31 17:45:45 2022 Incoming Data Channel: Cipher 'AES-256-GCM' initialized with 256 bit key
+Thu Mar 31 17:45:45 2022 ROUTE_GATEWAY 10.0.2.2/255.255.255.0 IFACE=eth0 HWADDR=52:54:00:4d:77:d3
+Thu Mar 31 17:45:45 2022 TUN/TAP device tun0 opened
+Thu Mar 31 17:45:45 2022 TUN/TAP TX queue length set to 100
+Thu Mar 31 17:45:45 2022 /sbin/ip link set dev tun0 up mtu 1500
+Thu Mar 31 17:45:45 2022 /sbin/ip addr add dev tun0 local 10.10.10.6 peer 10.10.10.5
+Thu Mar 31 17:45:45 2022 /sbin/ip route add 10.10.10.0/24 via 10.10.10.5
+Thu Mar 31 17:45:45 2022 /sbin/ip route add 10.10.10.0/24 via 10.10.10.5
+RTNETLINK answers: File exists
+Thu Mar 31 17:45:45 2022 ERROR: Linux route add command failed: external program exited with error status: 2
+Thu Mar 31 17:45:45 2022 WARNING: this configuration may cache passwords in memory -- use the auth-nocache option to prevent this
+Thu Mar 31 17:45:45 2022 Initialization Sequence Completed
+```
+* Пинги успешно идут
+```
+[root@client vagrant]# ping 10.10.10.1
+PING 10.10.10.1 (10.10.10.1) 56(84) bytes of data.
+64 bytes from 10.10.10.1: icmp_seq=1 ttl=64 time=2.18 ms
+64 bytes from 10.10.10.1: icmp_seq=2 ttl=64 time=4.05 ms
+64 bytes from 10.10.10.1: icmp_seq=3 ttl=64 time=1.29 ms
+```
+
+#### Вопросы
+* Не до конца разобрался с маршрутизацией при конфигурации server.conf из методички
+```
+port 1207
+proto udp
+dev tun
+ca /etc/openvpn/pki/ca.crt
+cert /etc/openvpn/pki/issued/server.crt
+key /etc/openvpn/pki/private/server.key
+dh /etc/openvpn/pki/dh.pem
+server 10.10.10.0 255.255.255.0
+route 192.168.10.0 255.255.255.0
+push "route 192.168.10.0 255.255.255.0"
+ifconfig-pool-persist ipp.txt
+client-to-client
+client-config-dir /etc/openvpn/client
+keepalive 10 120
+comp-lzo
+persist-key
+persist-tun
+status /var/log/openvpn-status.log
+log /var/log/openvpn.log
+verb 3
+```
+* Клиенсткая машина не устанавливает тунель, потому что не может изначально достучаться до 192.168.10.10
+* А при моей конфигурации получается не будет ходить трафик из подсетей 192.168.10.0/24  
+
 
 
 
