@@ -28,18 +28,11 @@
 
 
 ### Настройка OSPF
-* Заходим на виртуальную машину ansible запускаем playbook provision.yml
+* Заходим на виртуальную машину ansible запускаем плейбук playbook.yml
 ```
 vagrant ssh ansible
 [vagrant@ansible ~]$ sudo su
 [root@ansible vagrant]# cd /vagrant/
-[root@ansible vagrant]# ansible-playbook ./playbooks/provision.yml
+[root@ansible vagrant]# ansible-playbook ./provisioning/playbook.yml
 ```
-* он установит весь нужный софт и настроит FRR для проверки маршрутизации OSPF
-* В этой конфигурации у всех маршрутизаторов должен быть доступ к подсетям
-    * 192.168.10.0/24
-    * 192.168.20.0/24
-    * 192.168.30.0/24
-    * 10.0.10.0/30
-    * 10.0.11.0/30
-    * 10.0.12.0/30
+* он установит весь нужный софт и настроит виртуальные машины для проверки домашнего задания. 
