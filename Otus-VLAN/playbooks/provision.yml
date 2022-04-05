@@ -1,0 +1,36 @@
+---
+- name: VPN
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+        - name: Install epel-release
+          yum:
+            name:
+                - epel-release
+            state: present
+            update_cache: true
+        
+        - name: install soft
+          yum:
+            name:
+                - nano
+                - traceroute
+                - openvpn
+                - iperf3
+            state: present
+            update_cache: true
+        
+        - name: install easyrsa
+          yum:
+            name:
+                - easy-rsa
+            state: present
+            update_cache: true 
+          when: (ansible_hostname == "server")   
+
+
+        - name: Disable selinux 
+          selinux:
+            state: disabled   

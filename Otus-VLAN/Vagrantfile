@@ -4,59 +4,67 @@
 # vim: set ft=ruby :
 
 MACHINES = {
-:inetRouter => {
-        :box_name => "centos/7",
+#:inetRouter => {
+#       :box_name => "centos/7",
         #:public => {:ip => '10.10.10.1', :adapter => 1},
-        :net => [                  
-                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
-                   {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},
-                ]
-  },
-  :centralRouter => {
+#        :net => [                  
+#                  {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
+#                   {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},
+#                   {ip: '192.168.50.1', adapter: 4, virtualbox__intnet: "ansible"},
+#                ]
+#  },
+# :centralRouter => {
+#        :box_name => "centos/7",
+#        :net => [
+#                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
+#                   {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},                  
+#                   {adapter: 4, auto_config: false, virtualbox__intnet: "cror1-net"},
+#                   {ip: '192.168.50.2', adapter: 5, virtualbox__intnet: "ansible"},                 
+#                ]
+#  },
+  :officeRouter => {
         :box_name => "centos/7",
         :net => [
-                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
-                   {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},                  
-                   {ip: '192.168.0.129', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "cror1-net"},                 
-                ]
-  },
-  :office1Router => {
-        :box_name => "centos/7",
-        :net => [
-                   {ip: '192.168.0.130', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "cror1-net"},
-                   {ip: '192.168.2.1', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "dev-net"},
-                   {ip: '192.168.2.65', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
-                   {ip: '192.168.2.129', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "man-net"},
-                   {ip: '192.168.2.193', adapter: 6, netmask: "255.255.255.192", virtualbox__intnet: "hw-net"},
+                   { adapter: 2, auto_config: false, virtualbox__intnet: "cror1-net"},
+                   { adapter: 3, auto_config: false, virtualbox__intnet: "dev-net"},
+                   { adapter: 4, auto_config: false, virtualbox__intnet: "test-net1"},
+                   { adapter: 5, auto_config: false, virtualbox__intnet: "test-net2"},
+                   {ip: '192.168.50.3', adapter: 6, virtualbox__intnet: "ansible"},
                 ]
   },
   
   :testClient1 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '192.168.2.3', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "dev-net"},
-               {adapter: 3, auto_config: false, virtualbox__intnet: "testLAN1"},
+               {ip: '10.10.10.1', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net1"},
+               {ip: '192.168.50.4', adapter: 3, virtualbox__intnet: "ansible"},
             ]
   },
   :testServer1 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '192.168.2.4', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "dev-net"},
-               {adapter: 3, auto_config: false, virtualbox__intnet: "testLAN1"},
+               {ip: '10.10.10.254', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net1"},
+               {ip: '192.168.50.5', adapter: 6, virtualbox__intnet: "ansible"},
             ]
   },
   :testClient2 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '192.168.2.5', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "dev-net"},
-               {adapter: 3, auto_config: false, virtualbox__intnet: "testLAN2"},
+               {ip: '10.10.10.1', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net2"},
+               {ip: '192.168.50.6', adapter: 6, virtualbox__intnet: "ansible"},
             ]
   },
   :testServer2 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '192.168.2.6', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "dev-net"},
-               {adapter: 3, auto_config: false, virtualbox__intnet: "testLAN2"},
+               {ip: '10.10.10.254', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net2"},
+               {ip: '192.168.50.7', adapter: 6, virtualbox__intnet: "ansible"},
+            ]
+  },
+  :ansible => {
+    :box_name => "centos/7",
+    :net => [
+               {ip: '192.168.50.50', adapter: 6, virtualbox__intnet: "ansible"},
             ]
   },
 
@@ -89,24 +97,33 @@ Vagrant.configure("2") do |config|
         case boxname.to_s
         when "inetRouter"
           box.vm.provision "shell", run: "always", path: "inetRouter.sh"
+          box.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
         when "centralRouter"
           box.vm.provision "shell", run: "always", path: "centralRouter.sh"
-        when "office1Router"
-          box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sysctl net.ipv4.conf.all.forwarding=1
-            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
-            echo "GATEWAY=192.168.0.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1         
-            systemctl restart network
-            sysctl net.ipv4.conf.all.forwarding=1  
-            SHELL
+          box.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
+        when "officeRouter"
+          box.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
+#          box.vm.provision "shell", run: "always", inline: <<-SHELL
+#            sysctl net.ipv4.conf.all.forwarding=1
+#            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+#            echo "GATEWAY=192.168.0.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1         
+#            systemctl restart network
+#            sysctl net.ipv4.conf.all.forwarding=1  
+#            SHELL
         when "testClient1"
-          box.vm.provision "shell", run: "always", path: "testClient1.sh"
+          box.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
+#         box.vm.provision "shell", run: "always", path: "testClient1.sh"
         when "testServer1"
-          box.vm.provision "shell", run: "always", path: "testServer1.sh"
+          box.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
+#          box.vm.provision "shell", run: "always", path: "testServer1.sh"
         when "testClient2"
-          box.vm.provision "shell", run: "always", path: "testClient2.sh"
+          box.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
+#          box.vm.provision "shell", run: "always", path: "testClient2.sh"
         when "testServer2"
-          box.vm.provision "shell", run: "always", path: "testServer2.sh"
+          box.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
+#          box.vm.provision "shell", run: "always", path: "testServer2.sh"
+        when "ansible"
+          box.vm.provision "shell", run: "always", path: "ansible_install.sh"
         end
 
       end
