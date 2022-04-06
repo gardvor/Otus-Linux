@@ -1,36 +1,60 @@
 ---
-- name: VPN
+- name: Vlan
   hosts: all
   gather_facts: true
   become: true
 
   tasks:
-        - name: Install epel-release
-          yum:
-            name:
-                - epel-release
-            state: present
-            update_cache: true
-        
-        - name: install soft
-          yum:
-            name:
-                - nano
-                - traceroute
-                - openvpn
-                - iperf3
-            state: present
-            update_cache: true
-        
-        - name: install easyrsa
-          yum:
-            name:
-                - easy-rsa
-            state: present
-            update_cache: true 
-          when: (ansible_hostname == "server")   
+        - name: Copy vlan conf files on testClient1
+          template:
+            src: /templates/ifcfg-vlan100.testclient1
+            dest: /etc/sysconfig/network-scripts/ifcfg-vlan100
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "testClient1")
 
+        - name: Copy vlan conf files on testserver1
+          template:
+            src: /templates/ifcfg-vlan100.testserver1
+            dest: /etc/sysconfig/network-scripts/ifcfg-vlan100
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "testServer1")
 
-        - name: Disable selinux 
-          selinux:
-            state: disabled   
+        - name: Copy vlan conf files on testClient2
+          template:
+            src: /templates/ifcfg-vlan101.testclient2
+            dest: /etc/sysconfig/network-scripts/ifcfg-vlan101
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "testClient2")        
+
+        - name: Copy vlan conf files on testServer2
+          template:
+            src: /templates/ifcfg-vlan100.testserver2
+            dest: /etc/sysconfig/network-scripts/ifcfg-vlan101
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "testServer2")
+
+        - name: Copy vlan conf files on centralServer
+          template:
+            src: /templates/ifcfg-vlan100.centralserver
+            dest: /etc/sysconfig/network-scripts/ifcfg-vlan100
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "centralServer")
+
+        - name: Copy vlan conf files on centralServer
+          template:
+            src: /templates/ifcfg-vlan100.centralserver
+            dest: /etc/sysconfig/network-scripts/ifcfg-vlan101
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "centralServer")

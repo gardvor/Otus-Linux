@@ -4,67 +4,57 @@
 # vim: set ft=ruby :
 
 MACHINES = {
-#:inetRouter => {
-#       :box_name => "centos/7",
-        #:public => {:ip => '10.10.10.1', :adapter => 1},
-#        :net => [                  
-#                  {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
-#                   {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},
-#                   {ip: '192.168.50.1', adapter: 4, virtualbox__intnet: "ansible"},
-#                ]
-#  },
-# :centralRouter => {
-#        :box_name => "centos/7",
-#        :net => [
-#                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
-#                   {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},                  
-#                   {adapter: 4, auto_config: false, virtualbox__intnet: "cror1-net"},
-#                   {ip: '192.168.50.2', adapter: 5, virtualbox__intnet: "ansible"},                 
-#                ]
-#  },
-  :officeRouter => {
-        :box_name => "centos/7",
-        :net => [
-                   { adapter: 2, auto_config: false, virtualbox__intnet: "cror1-net"},
-                   { adapter: 3, auto_config: false, virtualbox__intnet: "dev-net"},
-                   { adapter: 4, auto_config: false, virtualbox__intnet: "test-net1"},
-                   { adapter: 5, auto_config: false, virtualbox__intnet: "test-net2"},
-                   {ip: '192.168.50.3', adapter: 6, virtualbox__intnet: "ansible"},
-                ]
+:inetRouter => {
+    :box_name => "centos/7",
+   #:public => {:ip => '10.10.10.1', :adapter => 1},
+    :net => [                  
+              {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
+              {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},
+              {ip: '192.168.50.1', adapter: 4, virtualbox__intnet: "ansible"},
+            ]
+  },
+  :centralRouter => {
+    :box_name => "centos/7",
+    :net => [
+              {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
+              {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"},                  
+              {adapter: 4, auto_config: false, virtualbox__intnet: "cror1-net"},
+              {ip: '192.168.50.2', adapter: 5, virtualbox__intnet: "ansible"},                 
+            ]
   },
   
   :testClient1 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '10.10.10.1', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net1"},
+               { adapter: 2, auto_config: false, virtualbox__intnet: "test-net1"},
                {ip: '192.168.50.4', adapter: 3, virtualbox__intnet: "ansible"},
             ]
   },
   :testServer1 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '10.10.10.254', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net1"},
-               {ip: '192.168.50.5', adapter: 6, virtualbox__intnet: "ansible"},
+               {adapter: 2, auto_config: false, virtualbox__intnet: "test-net1"},
+               {ip: '192.168.50.5', adapter: 3, virtualbox__intnet: "ansible"},
             ]
   },
   :testClient2 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '10.10.10.1', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net2"},
-               {ip: '192.168.50.6', adapter: 6, virtualbox__intnet: "ansible"},
+               {, adapter: 2, auto_config: false, virtualbox__intnet: "test-net2"},
+               {ip: '192.168.50.6', adapter: 3, virtualbox__intnet: "ansible"},
             ]
   },
   :testServer2 => {
     :box_name => "centos/7",
     :net => [
-               {ip: '10.10.10.254', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "test-net2"},
-               {ip: '192.168.50.7', adapter: 6, virtualbox__intnet: "ansible"},
+               { adapter: 2, auto_config: false, virtualbox__intnet: "test-net2"},
+               {ip: '192.168.50.7', adapter: 3, virtualbox__intnet: "ansible"},
             ]
   },
   :ansible => {
     :box_name => "centos/7",
     :net => [
-               {ip: '192.168.50.50', adapter: 6, virtualbox__intnet: "ansible"},
+               {ip: '192.168.50.50', adapter: 2, virtualbox__intnet: "ansible"},
             ]
   },
 

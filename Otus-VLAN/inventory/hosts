@@ -5,11 +5,12 @@ ansible_ssh_pass=vagrant
 [routers]
 inetRouter ansible_host=192.168.50.1
 centralRouter ansible_host=192.168.50.2 
-officeRouter ansible_host=192.168.50.3 
 
-[clients]
+[test1]
 testClient1 ansible_host=192.168.50.4 
 testServer1 ansible_host=192.168.50.5 
+
+[test2]
 testClient2 ansible_host=192.168.50.6 
 testServer2 ansible_host=192.168.50.7 
 
