@@ -7,7 +7,7 @@
   tasks:
         - name: Copy vlan conf files on testClient1
           template:
-            src: /templates/ifcfg-vlan100.testclient1
+            src: /vagrant/templates/ifcfg-vlan100.testclient1
             dest: /etc/sysconfig/network-scripts/ifcfg-vlan100
             owner: root
             group: root
@@ -16,7 +16,7 @@
 
         - name: Copy vlan conf files on testserver1
           template:
-            src: /templates/ifcfg-vlan100.testserver1
+            src: /vagrant/templates/ifcfg-vlan100.testserver1
             dest: /etc/sysconfig/network-scripts/ifcfg-vlan100
             owner: root
             group: root
@@ -25,7 +25,7 @@
 
         - name: Copy vlan conf files on testClient2
           template:
-            src: /templates/ifcfg-vlan101.testclient2
+            src: /vagrant/templates/ifcfg-vlan101.testclient2
             dest: /etc/sysconfig/network-scripts/ifcfg-vlan101
             owner: root
             group: root
@@ -34,27 +34,42 @@
 
         - name: Copy vlan conf files on testServer2
           template:
-            src: /templates/ifcfg-vlan100.testserver2
+            src: /vagrant/templates/ifcfg-vlan101.testserver2
             dest: /etc/sysconfig/network-scripts/ifcfg-vlan101
             owner: root
             group: root
             mode: 0664
           when: (ansible_hostname == "testServer2")
 
-        - name: Copy vlan conf files on centralServer
+        - name: Copy vlan conf files on centralRouter
           template:
-            src: /templates/ifcfg-vlan100.centralserver
+            src: /vagrant/templates/ifcfg-vlan100.centralrouter
             dest: /etc/sysconfig/network-scripts/ifcfg-vlan100
             owner: root
             group: root
             mode: 0664
-          when: (ansible_hostname == "centralServer")
+          when: (ansible_hostname == "centralRouter")
 
-        - name: Copy vlan conf files on centralServer
+        - name: Copy vlan conf files on centralRouter
           template:
-            src: /templates/ifcfg-vlan100.centralserver
+            src: /vagrant/templates/ifcfg-vlan101.centralrouter
             dest: /etc/sysconfig/network-scripts/ifcfg-vlan101
             owner: root
             group: root
             mode: 0664
-          when: (ansible_hostname == "centralServer")
+          when: (ansible_hostname == "centralRouter")
+
+        - name: Reload Network
+          systemd:
+            name: network
+            state: restarted
+            enabled: yes
+
+        - name: set up forward packages across routers
+          sysctl:
+            name: net.ipv4.conf.all.forwarding
+            value: '1'
+            state: present 
+          when: "'routers' in group_names"       
+            
+
