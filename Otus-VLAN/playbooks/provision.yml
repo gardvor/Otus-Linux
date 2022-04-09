@@ -5,6 +5,21 @@
   become: true
 
   tasks:
+        - name: ip forwardin enable on routers
+          sysctl:
+            name: net.ipv4.conf.all.forwarding
+            value: '1'
+            state: present 
+          when: "'routers' in group_names"
+
+        - name: Install soft
+          yum:
+            name: 
+              - nano  
+              - traceroute
+              - tcpdump
+            state: present   
+
         - name: Copy vlan conf files on testClient1
           template:
             src: /vagrant/templates/ifcfg-vlan100.testclient1
@@ -58,18 +73,72 @@
             group: root
             mode: 0664
           when: (ansible_hostname == "centralRouter")
+        
+        - name: Copy teaming conf files on centralRouter
+          template:
+            src: /vagrant/templates/ifcfg-team0.centralrouter
+            dest: /etc/sysconfig/network-scripts/ifcfg-team0
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "centralRouter")    
+
+        - name: Copy teaming conf files on centralRouter
+          template:
+            src: /vagrant/templates/ifcfg-eth1.routers
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "centralRouter")  
+
+        - name: Copy teaming conf files on centralRouter
+          template:
+            src: /vagrant/templates/ifcfg-eth2.routers
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth2
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "centralRouter")       
+
+        - name: Copy teaming conf files on inetRouter
+          template:
+            src: /vagrant/templates/ifcfg-team0.inetrouter
+            dest: /etc/sysconfig/network-scripts/ifcfg-team0
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "inetRouter")       
+        
+        - name: Copy teaming conf files on inetRouter
+          template:
+            src: /vagrant/templates/ifcfg-eth1.routers
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "inetRouter")
+          
+        - name: Copy teaming conf files on inetRouter
+          template:
+            src: /vagrant/templates/ifcfg-eth2.routers
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth2
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "inetRouter")
+
+        - name: Copy reverse routing conf files on inetRouter
+          template:
+            src: /vagrant/templates/route-team0.inetrouter
+            dest: /etc/sysconfig/network-scripts/route-team0
+            owner: root
+            group: root
+            mode: 0664
+          when: (ansible_hostname == "inetRouter")  
 
         - name: Reload Network
           systemd:
             name: network
             state: restarted
             enabled: yes
-
-        - name: set up forward packages across routers
-          sysctl:
-            name: net.ipv4.conf.all.forwarding
-            value: '1'
-            state: present 
-          when: "'routers' in group_names"       
-            
-
