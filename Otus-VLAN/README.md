@@ -16,5 +16,19 @@
 * testServer2- 10.10.10.1
 * testClient1 и testServer1 во vlan100
 * testClient2 и testServer2 во vlan101
+* Завести эти сервера на CentralRouter интерфейс eth3
+* Настроить teaming между InetRouter и CentralRouter на двух интерфейсах с каждой стороны
+
+## Выполнение домашнего задания
+* Команда Vagrant up разворачивает стенд с нужными виртуальными машинами
+* Заходим на виртуальную машину ansible и запускаем плейбук который настроит стенд для проверки домашнего задания
+
+```
+vagrant ssh ansible
+[vagrant@ansible ~]$ sudo su
+[root@ansible vagrant]# cd /vagrant/
+[root@ansible vagrant]# ansible-playbook ./playbooks/provision.yml 
+```
+### Проверим teaming
 
 
