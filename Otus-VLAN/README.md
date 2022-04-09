@@ -8,6 +8,10 @@
 Скачать все файлы в одну директорию, из директории с vagrantfile выполнить команду Vagrant up
 
 ## Задание
+Дана схема
 ![Схема](https://github.com/gardvor/Otus-Linux/blob/main/Otus-VLAN/network23-1801-024140.png)
-
+* testClient1 - 10.10.10.254
+* testClient2 - 10.10.10.254
+* testServer1- 10.10.10.1
+* testServer2- 10.10.10.1
 
