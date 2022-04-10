@@ -132,3 +132,10 @@ The ipa-server-install command was successful
 * Free-IPA сервер установлен
 
 ### Подключение клиенской машины к Free-IPA серверу
+* Заходим на машину ansible
+```
+vagrant ssh ansible
+[vagrant@ansible ~]$ sudo su
+[root@ansible vagrant]# cd /vagrant
+```
+ 
