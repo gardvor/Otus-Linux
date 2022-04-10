@@ -28,7 +28,7 @@ vagrant ssh ipaserver
 ```
 * Устанавливает FreeIPA-server
 ```
-[root@ipa-server vagrant]# dnf install ipa-server -y
+[root@ipa-server vagrant]# dnf install ipa-server  ipa-server-dns -y
 ```
 
 
