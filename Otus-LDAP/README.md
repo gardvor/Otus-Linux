@@ -129,3 +129,6 @@ These files are required to create replicas. The password for these
 files is the Directory Manager password
 The ipa-server-install command was successful
 ```
+* Free-IPA сервер установлен
+
+### Подключение клиенской машины к Free-IPA серверу
