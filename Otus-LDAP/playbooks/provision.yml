@@ -10,6 +10,28 @@
             path: /etc/resolv.conf
             state: present
             line: nameserver 192.168.50.1
+
+        - name: copy network conf file
+          template:
+            src: /vagrant/templates/ifcfg-eth0
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+            group: root
+            owner: root
+            mode: 0644
+
+        - name: copy network conf file
+          template:
+            src: /vagrant/templates/ifcfg-eth1
+            dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+            group: root
+            owner: root
+            mode: 0644
+
+        - name: Restart network
+          systemd:
+            name: network
+            state: restarted
+            enabled: yes      
             
         - name: Install ipa-client
           dnf:
@@ -19,6 +41,6 @@
 
         - name: add hosts
           command: 
-            cmd: ipa-client-install --domain=den.local --server=ipa-server.den.local --realm=DEN.LOCAL --principal admin -w 1q2w3e4r -U
+            cmd: ipa-client-install --domain=den.local --server=ipa-server.den.local --realm=DEN.LOCAL --principal admin -w 1q2w3e4r -U --mkhomedir
            
             
