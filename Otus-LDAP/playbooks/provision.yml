@@ -1,0 +1,24 @@
+---
+- name: IPA-Client
+  hosts: ipaclient.den.local
+  gather_facts: true
+  become: true
+
+  tasks:
+        - name: add DNS
+          lineinfile:
+            path: /etc/resolv.conf
+            state: present
+            line: nameserver 192.168.50.1
+            
+        - name: Install ipa-client
+          dnf:
+            name: ipa-client
+            state: present
+         
+
+        - name: add hosts
+          command: 
+            cmd: ipa-client-install --domain=den.local --server=ipa-server.den.local --realm=DEN.LOCAL --principal admin -w 1q2w3e4r -U
+           
+            

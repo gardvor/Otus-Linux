@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+	config.vm.box = "bento/rockylinux-8.5"
+	
+  config.vm.provider "virtualbox" do |v|
+	v.memory = 2048
+  v.cpus = 1
+  end
+	
+	
+	config.vm.define "ipaserver" do |ipaserver|
+    ipaserver.vm.network "private_network", ip: "192.168.50.1", virtualbox__intnet: "ldap"
+		ipaserver.vm.hostname = "ipa-server.den.local"
+    ipaserver.vm.provision "shell", path: "ssh_password_on.sh"
+    
+  end
+
+
+	config.vm.define "ipaclient" do |ipaclient|
+		ipaclient.vm.network "private_network", ip: "192.168.50.2", virtualbox__intnet: "ldap"
+		ipaclient.vm.hostname = "ipa-client.den.local"
+		ipaclient.vm.provision "shell", path: "ssh_password_on.sh"
+    
+  end
+
+  config.vm.define "ansible" do |ansible|
+		ansible.vm.network "private_network", ip: "192.168.50.50", virtualbox__intnet: "ldap"
+		ansible.vm.hostname = "ansible"
+		ansible.vm.provision "shell", path: "ansible_install.sh"
+    
+  end
+
+end

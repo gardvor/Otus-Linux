@@ -1,0 +1,21 @@
+[all:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_pass=vagrant
+
+[ipaclients:vars]
+ipaclient_domain=den.local
+ipaclient_realm=DEN.LOCAL
+ipaadmin_principal=admin
+ipaadmin_password=1q2w3e4r
+
+[ipaserver]
+ipaserver.den.local ansible_host=192.168.50.1
+
+[ipaclients]
+ipaclient.den.local ansible_host=192.168.50.2 
+
+
+
+
+
+
