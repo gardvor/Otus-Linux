@@ -136,6 +136,6 @@ The ipa-server-install command was successful
 ```
 vagrant ssh ansible
 [vagrant@ansible ~]$ sudo su
-[root@ansible vagrant]# cd /vagrant
+[root@ansible vagrant]# cd /vagrant_new
 ```
  
