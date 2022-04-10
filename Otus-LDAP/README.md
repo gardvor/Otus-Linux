@@ -4,7 +4,7 @@
 ## Что требуется
 Работа выполнялась на стенде Windows 10, Hashicorp Vagrant 2.2.19, Oracle VirtualBox 6.1
 
-## Как запустить
+## Разворачивание стенда
 Скачать все файлы в одну директорию, из директории с vagrantfile выполнить команду Vagrant up
 
 ## Задание
@@ -13,3 +13,22 @@
 3. Настроить аутентификацию по SSH-ключам *
 4. Firewall должен быть включен на сервере и на клиенте **
 5. Формат сдачи ДЗ - vagrant + ansible
+
+## Выполнение домашнего задания
+### Установить FreeIPA server 
+* Устанавливать сервер будем вручную
+* На развернутом стенде заходиv на машину ipaserver
+```
+vagrant ssh ipaserver
+[vagrant@ipa-server ~]$ sudo su
+```
+* Устанавливаем Stream репозиторий
+```
+[root@ipa-server vagrant]# dnf install @idm:DL1 -y
+```
+* Устанавливает FreeIPA-server
+```
+[root@ipa-server vagrant]# dnf install ipa-server -y
+```
+
+
