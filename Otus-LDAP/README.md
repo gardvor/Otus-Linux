@@ -138,4 +138,28 @@ vagrant ssh ansible
 [vagrant@ansible ~]$ sudo su
 [root@ansible vagrant]# cd /vagrant_new
 ```
+* Запускаем подготовленый плейбук он должен подключить машину ipaсlient к домену
+```
+[root@ansible vagrant_new]# ansible-playbook ./playbooks/provision.yml
+```
+* Для проверки заодим на машину ipaclient
+```
+vagrant ssh ipaclient
+[vagrant@ipa-client ~]$ sudo su
+```
+* Проверяем получает ipaclient билет от домена
+```
+[root@ipa-client vagrant]# kinit admin
+Password for admin@DEN.LOCAL: 
+[root@ipa-client vagrant]# klist
+Ticket cache: KCM:0
+Default principal: admin@DEN.LOCAL
+
+Valid starting       Expires              Service principal
+04/10/2022 18:24:14  04/11/2022 18:24:10  krbtgt/DEN.LOCAL@DEN.LOCAL
+```
+* Связь с доменом есть
+
+
+
  
