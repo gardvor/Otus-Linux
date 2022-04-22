@@ -1,0 +1,9 @@
+---
+    hostname: django.domain.local
+    root: /usr/share/nginx/vhosts
+    domain: djdomain 
+    db_user:  mydjangouser
+    db_password: SOMEPASSWORD!!!
+    db_name: djproject 
+    project_name_path: /usr/share/nginx/djangoproject
+    project_name: djangoproject  
