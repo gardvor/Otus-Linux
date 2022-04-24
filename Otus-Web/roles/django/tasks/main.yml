@@ -22,6 +22,15 @@
       state: permissive  
 
 # Установка Nginx  
+   
+  - name: Add directory nginx
+    file:
+      path: /etc/nginx/sites-available/
+      mode: 775
+      state: directory
+      owner: www-data
+      group: www-data
+
   - name: Add Nginx config
     template:
       src: default.j2
@@ -33,7 +42,7 @@
     file:
       path: "{{ root }}" 
       mode: 775
-      state: Directory
+      state: directory
       owner: www-data
       group: www-data
     notify:
@@ -45,7 +54,11 @@
     dnf:
       name:
         - postgresql
+        - postgresql-server
       state: present
+
+  - name: Init Posgresql
+    shell: "postgresql-setup initdb"
 
   - name: Start and Enable Posgresql
     systemd:
