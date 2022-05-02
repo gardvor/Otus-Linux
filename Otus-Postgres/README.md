@@ -15,14 +15,14 @@
 5. ВМ 3 использовать как реплику для чтения (подписаться на таблицы из ВМ №1 и №2 ).
 6. Реализовать горячее реплицирование для высокой доступности на 4ВМ и бэкапов.
 
-## ВЫполнение домашнего задания
+## Выполнение домашнего задания
 * Команда Vagrant up разворачивает стенд с нужными виртуальными машинами и прописаными на них конфигурационными файлами
 ### 1. На 1 ВМ создаем таблицы test1 для записи, test2 для запросов на чтение.
 * Заходим на машину postgres1
 ```
 vagrant ssh postgres1
 ```
-* Заходиv в Posgresql
+* Заходиим в Posgresql
 ```
 vagrant@postgres1:~$ sudo -u postgres psql
 psql (12.10 (Ubuntu 12.10-1.pgdg18.04+1))
@@ -62,3 +62,50 @@ CREATE TABLE
 ```
 otus=# CREATE PUBLICATION test1_pub FOR TABLE test1;
 CREATE PUBLICATION
+```
+### На 2 ВМ создаем таблицы test2 для записи, test1 для запросов на чтение.
+* Заходим на машину postgres2
+```
+vagrant ssh postgres2
+```
+* Заходиим в Posgresql
+```
+vagrant@postgres2:~$ sudo -u postgres psql
+psql (12.10 (Ubuntu 12.10-1.pgdg18.04+1))
+Type "help" for help.
+```
+* Создаем базу данных otus
+```
+postgres=# CREATE DATABASE otus;
+CREATE DATABASE
+```
+* Заходим в базу otus
+```
+postgres=# \c otus
+You are now connected to database "otus" as user "postgres".
+```
+* Создаем таблицы test1
+```
+otus=# CREATE TABLE test1
+(
+id SERIAL,
+name TEXT,
+price DECIMAL
+);
+CREATE TABLE
+```
+* Создаем таблицу test2
+```
+otus=# CREATE TABLE test2
+(
+id SERIAL,
+name TEXT,
+price DECIMAL
+);
+CREATE TABLE
+```
+* Создаем публикацию для таблицы test2
+```
+otus=# CREATE PUBLICATION test2_pub FOR TABLE test2;
+CREATE PUBLICATION
+```
