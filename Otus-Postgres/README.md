@@ -158,3 +158,50 @@ NOTICE:  created replication slot "test2_sub" on publisher
 CREATE SUBSCRIPTION
 ```
 
+### Проверка
+* На ВМ1 добавим в таблицу test1 данные
+```
+otus=# INSERT INTO test1 (name, price) VALUES ('Hammer', 4.50), ('Chainsaw', 6.20), ('Plane', 3.80);
+INSERT 0 3
+otus=# select * from test1;
+ id |   name   | price 
+----+----------+-------
+  1 | Hammer   |  4.50
+  2 | Chainsaw |  6.20
+  3 | Plane    |  3.80
+(3 rows)
+```
+* Проверим на машине ВМ2
+```
+otus=# select * from test1;
+ id |   name   | price 
+----+----------+-------
+  1 | Hammer   |  4.50
+  2 | Chainsaw |  6.20
+  3 | Plane    |  3.80
+(3 rows)
+```
+* На ВМ2 добавим в таблицу test2 данные
+```
+otus=# INSERT INTO test2 (name, price) VALUES ('Mirror', 4.00), ('Flower pot', 2.57), ('Vase', 3.20);
+INSERT 0 3
+otus=# select * from test2;
+ id |    name    | price 
+----+------------+-------
+  1 | Mirror     |  4.00
+  2 | Flower pot |  2.57
+  3 | Vase       |  3.20
+(3 rows)
+```
+* Проверяем на ВМ1
+```
+otus=# select * from test2;
+ id |    name    | price 
+----+------------+-------
+  1 | Mirror     |  4.00
+  2 | Flower pot |  2.57
+  3 | Vase       |  3.20
+(3 rows)
+```
+
+
