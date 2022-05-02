@@ -1,19 +1,33 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 Vagrant.configure(2) do |config|
-  config.vm.box = "rockylinux/8"
-  config.vm.box_version = "4.0.0"
+  config.vm.box = "ubuntu/bionic64"
+#  config.vm.box_version = "4.0.0"
 
   config.vm.define "postgres1" do |postgres1|
   postgres1.vm.hostname = "postgres1"
   postgres1.vm.network "private_network", ip: "192.168.10.10"
   postgres1.vm.provision "shell", run: "always", path: "postgres-install.sh"
+  postgres1.vm.provision "shell", run: "always", inline: <<-SHELL
+  cp /vagrant/postgresql.conf/postgresql1.conf /etc/postgresql/12/main/postgresql.conf
+  cp /vagrant/pg_hba.conf/pg_hba1.conf /etc/postgresql/12/main/pg_hba.conf
+  chown postgres:postgres /etc/postgresql/12/main/postgresql.conf
+  chown postgres:postgres /etc/postgresql/12/main/pg_hba.conf
+  systemctl restart postgresql
+  SHELL
 end
   
 config.vm.define "postgres2" do |postgres2|
   postgres2.vm.hostname = "postgres2"
   postgres2.vm.network "private_network", ip: "192.168.10.20"
   postgres2.vm.provision "shell", run: "always", path: "postgres-install.sh"
+  postgres2.vm.provision "shell", run: "always", inline: <<-SHELL
+  cp /vagrant/postgresql.conf/postgresql2.conf /etc/postgresql/12/main/postgresql.conf
+  cp /vagrant/pg_hba.conf/pg_hba2.conf /etc/postgresql/12/main/pg_hba.conf
+  chown postgres:postgres /etc/postgresql/12/main/postgresql.conf
+  chown postgres:postgres /etc/postgresql/12/main/pg_hba.conf
+  systemctl restart postgresql
+  SHELL
  
 end
 
@@ -21,6 +35,13 @@ config.vm.define "postgres3" do |postgres3|
   postgres3.vm.hostname = "postgres3"
   postgres3.vm.network "private_network", ip: "192.168.10.30"
   postgres3.vm.provision "shell", run: "always", path: "postgres-install.sh"
+  postgres3.vm.provision "shell", run: "always", inline: <<-SHELL
+  cp /vagrant/postgresql.conf/postgresql3.conf /etc/postgresql/12/main/postgresql.conf
+  cp /vagrant/pg_hba.conf/pg_hba3.conf /etc/postgresql/12/main/pg_hba.conf
+  chown postgres:postgres /etc/postgresql/12/main/postgresql.conf
+  chown postgres:postgres /etc/postgresql/12/main/pg_hba.conf
+  systemctl restart postgresql
+  SHELL
 
 end
 
@@ -28,6 +49,13 @@ config.vm.define "postgres4" do |postgres4|
   postgres4.vm.hostname = "postgres4"
   postgres4.vm.network "private_network", ip: "192.168.10.40"
   postgres4.vm.provision "shell", run: "always", path: "postgres-install.sh"
+  postgres4.vm.provision "shell", run: "always", inline: <<-SHELL
+  cp /vagrant/postgresql.conf/postgresql4.conf /etc/postgresql/12/main/postgresql.conf
+  cp /vagrant/pg_hba.conf/pg_hba4.conf /etc/postgresql/12/main/pg_hba.conf
+  chown postgres:postgres /etc/postgresql/12/main/postgresql.conf
+  chown postgres:postgres /etc/postgresql/12/main/pg_hba.conf
+  systemctl restart postgresql
+  SHELL
 
 end
 
