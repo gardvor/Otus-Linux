@@ -302,6 +302,7 @@ otus=# select * from test1;
   6 | Axe         |  5.10
   7 | Wrench      |  2.50
 (7 rows)
+```
 #### ВМ2
 ```
 otus=# INSERT INTO test2 (name, price) VALUES ('Watering can', 5.10), ('Garden hose', 7.40), ('Rake', 3.30);
