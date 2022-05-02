@@ -22,7 +22,7 @@
 ```
 vagrant ssh postgres1
 ```
-* Заходиим в Posgresql
+* Заходим в Posgresql
 ```
 vagrant@postgres1:~$ sudo -u postgres psql
 psql (12.10 (Ubuntu 12.10-1.pgdg18.04+1))
@@ -57,11 +57,6 @@ name TEXT,
 price DECIMAL
 );
 CREATE TABLE
-```
-* Создаем публикацию для таблицы test1
-```
-otus=# CREATE PUBLICATION test1_pub FOR TABLE test1;
-CREATE PUBLICATION
 ```
 ### На 2 ВМ создаем таблицы test2 для записи, test1 для запросов на чтение.
 * Заходим на машину postgres2
@@ -104,8 +99,57 @@ price DECIMAL
 );
 CREATE TABLE
 ```
+### На ВМ1 создаем публикацию таблицы test1
+* Заходим на машину postgres1
+```
+vagrant ssh postgres1
+```
+* Заходим в Posgresql
+```
+vagrant@postgres1:~$ sudo -u postgres psql
+psql (12.10 (Ubuntu 12.10-1.pgdg18.04+1))
+Type "help" for help.
+```
+* Создаем публикацию для таблицы test1
+```
+otus=# CREATE PUBLICATION test1_pub FOR TABLE test1;
+CREATE PUBLICATION
+```
+* Поменяем пароль для пользователя postgres
+```
+postgres=# \password
+Enter new password for user "postgres": 
+Enter it again:
+```
+* Пароль: 12345678
+### На ВМ2 создаем публикацию таблицы test2
+* Заходим на машину postgres2
+```
+vagrant ssh postgres2
+```
+* Заходим в Posgresql
+```
+vagrant@postgres2:~$ sudo -u postgres psql
+psql (12.10 (Ubuntu 12.10-1.pgdg18.04+1))
+Type "help" for help.
+```
 * Создаем публикацию для таблицы test2
 ```
 otus=# CREATE PUBLICATION test2_pub FOR TABLE test2;
 CREATE PUBLICATION
 ```
+* Поменяем пароль для пользователя postgres
+```
+postgres=# \password
+Enter new password for user "postgres": 
+Enter it again:
+```
+* Пароль: 12345678
+### На ВМ2 создаем подписку на публицкацию test1_pub
+```
+otus=# CREATE SUBSCRIPTION test1_sub CONNECTION 'host=192.168.10.10 port=5432 password=12345678 user=postgres dbname=otus' PUBLICATION test1_pub;
+NOTICE:  created replication slot "test1_sub" on publisher
+CREATE SUBSCRIPTION
+```
+### На ВМ1 создаем подписку на публицкацию test2_pub
+
