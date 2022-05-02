@@ -203,5 +203,57 @@ otus=# select * from test2;
   3 | Vase       |  3.20
 (3 rows)
 ```
-
+### ВМ 3 использовать как реплику для чтения (подписаться на таблицы из ВМ №1 и №2 ).
+* Действуем аналогично первым двум заданияи
+* Заходим на машину postgres3
+```
+vagrant ssh postgres3
+```
+* Заходим в Posgresql
+```
+vagrant@postgres3:~$ sudo -u postgres psql
+psql (12.10 (Ubuntu 12.10-1.pgdg18.04+1))
+Type "help" for help.
+```
+* Создаем базу данных otus
+```
+postgres=# CREATE DATABASE otus;
+CREATE DATABASE
+```
+* Заходим в базу otus
+```
+postgres=# \c otus
+You are now connected to database "otus" as user "postgres".
+```
+* Создаем таблицы test1
+```
+otus=# CREATE TABLE test1
+(
+id SERIAL,
+name TEXT,
+price DECIMAL
+);
+CREATE TABLE
+```
+* Создаем таблицу test2
+```
+otus=# CREATE TABLE test2
+(
+id SERIAL,
+name TEXT,
+price DECIMAL
+);
+CREATE TABLE
+```
+* Создаем подписки на test1_pub и test2_pub
+```
+otus=# CREATE SUBSCRIPTION test1_sub3 CONNECTION 'host=192.168.10.10 port=5432 password=12345678 user=postgres dbname=otus' PUBLICATION test1_pub;
+NOTICE:  created replication slot "test1_sub3" on publisher
+CREATE SUBSCRIPTION
+otus=# CREATE SUBSCRIPTION test2_sub3 CONNECTION 'host=192.168.10.20 port=5432 password=12345678 user=postgres dbname=otus' PUBLICATION test2_pub;
+NOTICE:  created replication slot "test2_sub3" on publisher
+CREATE SUBSCRIPTION
+```
+* Нельзя использовать имя подписки с предыдущих машин test1_sub и test2_sub, выдает ошибку.
+### Реализовать горячее реплицирование для высокой доступности на 4ВМ и бэкапов.
 
