@@ -255,5 +255,136 @@ NOTICE:  created replication slot "test2_sub3" on publisher
 CREATE SUBSCRIPTION
 ```
 * Нельзя использовать имя подписки с предыдущих машин test1_sub и test2_sub, выдает ошибку.
-### Реализовать горячее реплицирование для высокой доступности на 4ВМ и бэкапов.
+* Меняем пароль пользователя postgres нужно будет для следующего задания.
+```
+postgres=# \password
+Enter new password for user "postgres":
+Enter it again:
+```
 
+### Реализовать горячее реплицирование для высокой доступности на 4ВМ и бэкапов.
+* На ВМ4
+```
+vagrant ssh postgres4
+```
+* Подключаем репликацию
+```
+vagrant@postgres4:~$ sudo -u postgres  pg_basebackup -h 192.168.10.30 -p 5432  -P -v -R -X stream -C -S pgstandby -D /var/lib/postgresql/12/main
+Password:
+pg_basebackup: initiating base backup, waiting for checkpoint to complete
+pg_basebackup: checkpoint completed
+pg_basebackup: write-ahead log start point: 0/E000028 on timeline 1
+pg_basebackup: starting background WAL receiver
+pg_basebackup: created replication slot "pgstandby"
+32630/32630 kB (100%), 1/1 tablespace
+pg_basebackup: write-ahead log end point: 0/E000100
+pg_basebackup: waiting for background process to finish streaming ...
+pg_basebackup: syncing data to disk ...
+pg_basebackup: base backup completed
+```
+* Перезапускаем службу postgresql
+```
+vagrant@postgres4:~$ sudo systemctl restart postgresql
+```
+
+### Проверка
+#### ВМ1
+```
+otus=# INSERT INTO test1 (name, price) VALUES ('Screwdriver', 13.50), ('Drill', 10.40),('Axe', 5.10), ('Wrench', 2.50);
+otus=# select * from test1;
+ id |    name     | price 
+----+-------------+-------
+  1 | Hammer      |  4.50
+  2 | Chainsaw    |  6.20
+  3 | Plane       |  3.80
+  4 | Screwdriver | 13.50
+  5 | Drill       | 10.40
+  6 | Axe         |  5.10
+  7 | Wrench      |  2.50
+(7 rows)
+#### ВМ2
+```
+otus=# INSERT INTO test2 (name, price) VALUES ('Watering can', 5.10), ('Garden hose', 7.40), ('Rake', 3.30);
+otus=# select * from test2;
+ id |     name     | price 
+----+--------------+-------
+  1 | Mirror       |  4.00
+  2 | Flower pot   |  2.57
+  3 | Vase         |  3.20
+  4 | Watering can |  5.10
+  5 | Garden hose  |  7.40
+  6 | Rake         |  3.30
+(6 rows)
+otus=# select * from test1;
+ id |    name     | price 
+----+-------------+-------
+  1 | Hammer      |  4.50
+  2 | Chainsaw    |  6.20
+  3 | Plane       |  3.80
+  4 | Screwdriver | 13.50
+  5 | Drill       | 10.40
+  6 | Axe         |  5.10
+  7 | Wrench      |  2.50
+(7 rows)
+```
+#### ВМ1
+```
+otus=# select * from test2;
+ id |     name     | price 
+----+--------------+-------
+  1 | Mirror       |  4.00
+  2 | Flower pot   |  2.57
+  3 | Vase         |  3.20
+  4 | Watering can |  5.10
+  5 | Garden hose  |  7.40
+  6 | Rake         |  3.30
+(6 rows)
+```
+#### ВМ3
+```
+otus=# select * from test1;
+ id |    name     | price 
+----+-------------+-------
+  1 | Hammer      |  4.50
+  2 | Chainsaw    |  6.20
+  3 | Plane       |  3.80
+  4 | Screwdriver | 13.50
+  5 | Drill       | 10.40
+  6 | Axe         |  5.10
+  7 | Wrench      |  2.50
+(7 rows)
+otus=# select * from test2;
+ id |     name     | price 
+----+--------------+-------
+  1 | Mirror       |  4.00
+  2 | Flower pot   |  2.57
+  3 | Vase         |  3.20
+  4 | Watering can |  5.10
+  5 | Garden hose  |  7.40
+  6 | Rake         |  3.30
+(6 rows)
+```
+#### ВМ4
+```
+otus=# select * from test1;
+ id |    name     | price 
+----+-------------+-------
+  1 | Hammer      |  4.50
+  2 | Chainsaw    |  6.20
+  3 | Plane       |  3.80
+  4 | Screwdriver | 13.50
+  5 | Drill       | 10.40
+  6 | Axe         |  5.10
+  7 | Wrench      |  2.50
+(7 rows)
+otus=# select * from test2;
+ id |     name     | price 
+----+--------------+-------
+  1 | Mirror       |  4.00
+  2 | Flower pot   |  2.57
+  3 | Vase         |  3.20
+  4 | Watering can |  5.10
+  5 | Garden hose  |  7.40
+  6 | Rake         |  3.30
+(6 rows)
+```
