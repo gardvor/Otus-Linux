@@ -22,4 +22,41 @@
 ```
 vagrant ssh postgres1
 ```
+* Заходиv в Posgresql
+```
+vagrant@postgres1:~$ sudo -u postgres psql
+psql (12.10 (Ubuntu 12.10-1.pgdg18.04+1))
+Type "help" for help.
+```
+* Создаем базу данных otus
+```
+postgres=# CREATE DATABASE otus;
+CREATE DATABASE
+```
+* Заходим в базу otus
+```
+postgres=# \c otus
+You are now connected to database "otus" as user "postgres".
+```
+* Создаем таблицы test1
+```
+otus=# CREATE TABLE test1
+(
+id SERIAL,
+name TEXT,
+price DECIMAL
+);
+CREATE TABLE
+```
+* Создаем таблицу test2
+```
+otus=# CREATE TABLE test2
+(
+id SERIAL,
+name TEXT,
+price DECIMAL
+);
+CREATE TABLE
+```
+
 
