@@ -58,5 +58,7 @@ price DECIMAL
 );
 CREATE TABLE
 ```
-
-
+* Создаем публикацию для таблицы test1
+```
+otus=# CREATE PUBLICATION test1_pub FOR TABLE test1;
+CREATE PUBLICATION
