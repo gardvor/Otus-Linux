@@ -145,11 +145,16 @@ Enter new password for user "postgres":
 Enter it again:
 ```
 * Пароль: 12345678
-### На ВМ2 создаем подписку на публицкацию test1_pub
+### На ВМ2 в базе otus создаем подписку на публицкацию test1_pub
 ```
 otus=# CREATE SUBSCRIPTION test1_sub CONNECTION 'host=192.168.10.10 port=5432 password=12345678 user=postgres dbname=otus' PUBLICATION test1_pub;
 NOTICE:  created replication slot "test1_sub" on publisher
 CREATE SUBSCRIPTION
 ```
-### На ВМ1 создаем подписку на публицкацию test2_pub
+### На ВМ1 в базе otus создаем подписку на публицкацию test2_pub
+```
+otus=# CREATE SUBSCRIPTION test2_sub CONNECTION 'host=192.168.10.20 port=5432 password=12345678 user=postgres dbname=otus' PUBLICATION test2_pub;
+NOTICE:  created replication slot "test2_sub" on publisher
+CREATE SUBSCRIPTION
+```
 
