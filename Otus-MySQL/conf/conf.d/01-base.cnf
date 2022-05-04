@@ -8,3 +8,4 @@ symbolic-links=0
 server-id = 1
 innodb_file_per_table = 1
 skip-name-resolve
+
