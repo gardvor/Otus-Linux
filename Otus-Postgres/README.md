@@ -1,5 +1,5 @@
 # OTUS - POSTGRES
-Домашнее задание OTUS Linux Professional по теме "Мосты, туннели и VPN"
+Домашнее задание OTUS Linux Professional по теме "Postgres: Backup + Репликация "
 
 ## Что требуется
 Работа выполнялась на стенде Windows 10, Hashicorp Vagrant 2.2.19, Oracle VirtualBox 6.3
