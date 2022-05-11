@@ -179,7 +179,8 @@ mysql> SHOW TABLES;
 * Подключаем и запускаем Slave режим
 ```
 mysql> CHANGE MASTER TO MASTER_HOST = "192.168.10.10", MASTER_PORT = 3306, MASTER_USER = "replication", MASTER_PASSWORD = "1q2w3e$R", MASTER_AUTO_POSITION = 1;
-mysql> START SLAVE;mysql> SHOW SLAVE STATUS\G
+mysql> START SLAVE;
+mysql> SHOW SLAVE STATUS\G
 *************************** 1. row ***************************
                Slave_IO_State: Waiting for master to send event
                   Master_Host: 192.168.10.10
