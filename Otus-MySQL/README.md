@@ -23,7 +23,29 @@
 * пример в логе изменения строки и появления строки на реплике
 
 ## Выполнение домашнего задания
-* Команда Vagrant up разворачивает стенд с нужными виртуальными машинами и прописаными на них конфигурационными файлами
-### 1. На 1 ВМ создаем таблицы test1 для записи, test2 для запросов на чтение.
-* Заходим на машину postgres1
+* Команда Vagrant up разворачивает стенд с нужными виртуальными машинами, и установленным и запущеным mysql
+### 1. Настройка Master
+* Заходим на машину master
+```
+vagrant ssh master
+```
+* Входим в интерфей mysql
+```
+[vagrant@master ~]$ sudo su
+[root@master vagrant]# cat /var/log/mysqld.log | grep 'root@localhost:' | awk '{print $11}'
+tYo,ruos!5Ge
+[root@master vagrant]# mysql -u root -p'tYo,ruos!5Ge'
+```
+* Меняем пароль на пользователя root в mysql
+```
+mysql> ALTER USER USER() IDENTIFIED BY '1q2w3e$R';
+```
+* Проверяем параметр SERVER_ID
+```
+mysql> SELECT @@server_id;
++-------------+
+| @@server_id |
++-------------+
+|           1 |
++-------------+
 ```
