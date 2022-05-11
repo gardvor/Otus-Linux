@@ -87,7 +87,7 @@ mysql> SHOW TABLES;
 mysql> CREATE USER 'replication'@'%' IDENTIFIED BY '1q2w3e$R';
 mysql> GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY '1q2w3e$R';
 ```
-* Дампим базы для залива на Slave
+* Дампим базы для залива на Slave игнорируя ненужные таблицы
 ```
 [root@master vagrant]# mysqldump --all-databases --triggers --routines --master-data --ignore-table=bet.events_on_demand --ignore-table=bet.v_same_event -uroot -p > master.sql
 ```
@@ -114,4 +114,66 @@ server-id = 2
 #replicate-ignore-table=bet.events_on_demand
 #replicate-ignore-table=bet.v_same_event
 ```
-
+* Перезапускаем MySQL
+```
+root@slave vagrant]# systemctl restart mysql
+```
+* Входим в интерфейс mysql
+```
+[root@slave vagrant]# cat /var/log/mysqld.log | grep 'root@localhost:' | awk '{print $11}'
+*pot3sBkLle*
+[root@slave vagrant]# mysql -uroot -p'*pot3sBkLle*'
+```
+* Меняем пароль на пользователя root в mysql
+```
+mysql> ALTER USER USER() IDENTIFIED BY '1q2w3e$R';
+```
+* Проверяем параметр SERVER_ID
+```
+mysql> SELECT @@server_id;
++-------------+
+| @@server_id |
++-------------+
+|           2 |
++-------------+
+```
+* Проверяем включен ли режим GTID
+```
+mysql> SHOW VARIABLES LIKE 'gtid_mode';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| gtid_mode     | ON    |
++---------------+-------+
+```
+* Сбрасываем режим master что бы не было проблем с GTID при заливке дампа Мастера
+```
+mysql> reset master;
+```
+* Заливаем дамп
+```
+mysql> SOURCE /home/vagrant/master.sql
+```
+* Проверяем залитую базу
+```
+mysql> SHOW DATABASES LIKE 'bet';
++----------------+
+| Database (bet) |
++----------------+
+| bet            |
++----------------+
+mysql> USE bet;
+Database changed
+mysql> SHOW TABLES;
++---------------+
+| Tables_in_bet |
++---------------+
+| bookmaker     |
+| competition   |
+| market        |
+| odds          |
+| outcome       |
++---------------+
+```
+* Видно что проигнорированных таблиц нет
+* 
