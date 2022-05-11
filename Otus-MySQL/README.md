@@ -49,3 +49,50 @@ mysql> SELECT @@server_id;
 |           1 |
 +-------------+
 ```
+* Проверяем включен ли режим GTID
+```
+mysql> SHOW VARIABLES LIKE 'gtid_mode';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| gtid_mode     | ON    |
++---------------+-------+
+```
+* Создаем базу bet;
+```
+mysql> CREATE DATABASE bet;
+```
+* Загрузим в нее дамп из данного в задании файла bet.dmp
+```
+[root@master vagrant]# mysql -uroot -p -D bet < /vagrant/bet.dmp
+```
+* Проверим что загрузилось
+```
+mysql> USE bet;
+mysql> SHOW TABLES;
++------------------+
+| Tables_in_bet    |
++------------------+
+| bookmaker        |
+| competition      |
+| events_on_demand |
+| market           |
+| odds             |
+| outcome          |
+| v_same_event     |
++------------------+
+```
+* Создаем пользователя с правами репликации
+```
+mysql> CREATE USER 'replication'@'%' IDENTIFIED BY '1q2w3e$R';
+mysql> GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY '1q2w3e$R';
+```
+* Дампим базы для залива на Slave
+```
+[root@master vagrant]# mysqldump --all-databases --triggers --routines --master-data --ignore-table=bet.events_on_demand --ignore-table=bet.v_same_event -uroot -p > master.sql
+```
+* Копируем файл дамп на машину slave
+```
+scp ./master.sql vagrant@192.168.10.20:/home/vagrant
+```
+
