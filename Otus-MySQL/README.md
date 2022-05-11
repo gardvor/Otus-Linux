@@ -95,4 +95,23 @@ mysql> GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%' IDENTIFIED BY '1q2w3e
 ```
 scp ./master.sql vagrant@192.168.10.20:/home/vagrant
 ```
+### 2. Настройка Slave
+* Заходим на машину Slave
+```
+vagrant ssh slave
+```
+* Меняем конфигурационные файлы
+* В файле /etc/my.cnf.d/01-base.cnf меняем параметр 
+```
+server-id = 1
+```
+на 
+```
+server-id = 2
+```
+* В файле /etc/my.cnf.d/05-binlog.cnf раскомментируем строки
+```
+#replicate-ignore-table=bet.events_on_demand
+#replicate-ignore-table=bet.v_same_event
+```
 
