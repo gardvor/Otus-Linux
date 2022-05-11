@@ -109,7 +109,7 @@ server-id = 1
 ```
 server-id = 2
 ```
-* В файле /etc/my.cnf.d/05-binlog.cnf раскомментируем строки
+* В файле /etc/my.cnf.d/05-binlog.cnf раскомментируем строки, для игнорирования ненужных таблиц при репликации
 ```
 #replicate-ignore-table=bet.events_on_demand
 #replicate-ignore-table=bet.v_same_event
