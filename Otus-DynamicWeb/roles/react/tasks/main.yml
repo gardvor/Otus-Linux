@@ -1,0 +1,53 @@
+---
+- name: Nodejs repo
+  shell: curl -sL https://rpm.nodesource.com/setup_14.x | bash -
+
+- name: Nodejs install
+  yum:
+    name: nodejs
+    state: present
+
+- name: React app create
+  shell: |
+    cd /tmp
+    npm install -g create-react-app
+    create-react-app hello-world
+
+- name: React app copy
+  copy: src=App.js dest=/tmp/hello-world/src/App.js
+
+- name: build react app
+  shell: |
+    cd /tmp/hello-world
+    npm run build
+
+- name: React app directory
+  file:
+    path: /var/www/react
+    state: directory
+    mode: '0755'
+    owner: nginx
+    group: nginx
+
+- name: Copy app to directory
+  copy:
+    src: /tmp/hello-world/build/
+    dest: /var/www/react
+    remote_src: yes
+
+- name: Set owner to directory
+  file:
+    path: /var/www/react
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx
+
+- name: Copy config
+  copy: src=react.conf dest=/etc/nginx/conf.d/react.conf
+
+- name: Nginx restart
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes

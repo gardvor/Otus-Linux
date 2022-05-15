@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+  config.vm.box = "centos/7"
+#  config.vm.box_version = "4.0.0"
+config.vm.define "web" do |web|
+  web.vm.hostname = "web"
+  web.vm.network "private_network", ip: "192.168.10.10"
+  web.vm.network "forwarded_port", guest: 8080, host: 8080
+  web.vm.network "forwarded_port", guest: 8081, host: 8081
+  web.vm.network "forwarded_port", guest: 8082, host: 8082
+  web.vm.provision "shell", run: "always", path: "ssh_password_on.sh"
+end
+  
+config.vm.define "ansible" do |ansible|
+  ansible.vm.hostname = "ansible"
+  ansible.vm.network "private_network", ip: "192.168.10.30"
+  ansible.vm.provision "shell", run: "always", path: "ansible_install.sh"
+  ansible.vm.provision "shell", run: "always", inline: <<-SHELL
+          cp -r /vagrant/ /vagrant-new/    
+		      SHELL
+
+end
+
+end
