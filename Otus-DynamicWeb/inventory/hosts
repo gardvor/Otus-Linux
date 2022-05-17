@@ -1,8 +1,0 @@
-[all:vars]
-ansible_ssh_user=vagrant
-ansible_ssh_pass=vagrant
-
-[web]
-server ansible_host=192.168.10.10
-
-

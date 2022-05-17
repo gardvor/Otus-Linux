@@ -1,9 +1,0 @@
----
-- hosts: web
-  name: install laravel/django/react
-  become: true
-  roles:
-    - role: nginx
-    - role: laravel
-    - role: django
-    - role: react
