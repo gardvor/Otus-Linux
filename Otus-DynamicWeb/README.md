@@ -34,6 +34,9 @@ vagrant ssh ansible
 [vagrant@ansible vagrant]$ ansible-playbook ./web.yml 
 ```
 * После того как плейбук закончит работать можно проверять домашнюю работу
+* Laravel [http://localhost:8080](http://localhost:8080/homework)
 ![Laravel](https://github.com/gardvor/Otus-Linux/blob/main/Otus-DynamicWeb/screen/laravel.jpg)
+* Django [http://localhost:8081](http://localhost:8081)
 ![Django](https://github.com/gardvor/Otus-Linux/blob/main/Otus-DynamicWeb/screen/django.jpg)
+* ReactJc [http://localhost:8082](http://localhost:8082)
 ![ReactJc](https://github.com/gardvor/Otus-Linux/blob/main/Otus-DynamicWeb/screen/reactjs.jpg)
