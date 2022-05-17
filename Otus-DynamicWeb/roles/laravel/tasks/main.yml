@@ -1,0 +1,73 @@
+---
+- name: Install php-fpm
+  yum:
+    name:
+      - php-fpm 
+      - php-cli 
+      - php-mysql
+      - php-gd 
+      - php-pdo 
+      - php-pecl-memcache 
+      - php-pear 
+      - php-xml 
+      - php-xmlrpc 
+      - php-mbstring 
+      - php-mcrypt
+    state: present
+
+- name: Copy fpm www.conf
+  copy: 
+    src: www.conf 
+    dest: /etc/php-fpm.d/www.conf
+
+- name: Php-fpm restart
+  systemd:
+    name: php-fpm
+    state: restarted
+    enabled: yes
+
+- name: Copy nginx laravel.conf
+  copy: 
+    src: laravel.conf 
+    dest: /etc/nginx/conf.d/laravel.conf
+
+- name: Nginx restart
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: Create laravel directory
+  file:
+    path: /var/www/laravel
+    state: directory
+    mode: '0755'
+    owner: nginx
+    group: root
+
+- name: Install composer & laravel
+  shell: |
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+    cd /var/www/laravel
+    yes | composer create-project laravel/laravel .
+
+- name: Copy laravel route
+  copy: 
+    src: routes.php 
+    dest: /var/www/laravel/app/Http/routes.php
+
+- name: Laravel directory owner
+  file:
+    path: /var/www/laravel
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx
+
+- name: Laravel storage owner
+  file:
+    path: /var/www/laravel/storage
+    state: directory
+    mode: '0755'
+    owner: nginx
+    group: nginx
