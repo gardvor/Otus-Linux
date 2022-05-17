@@ -21,3 +21,18 @@
 * Формат сдачи ДЗ - vagrant + ansible
 
 ## Выполнение домашнего задания
+* Будем настраивать
+* php-fpm + laravel + 8080 порт
+* python + uwsgi + django + 8081 порт
+* ReactJs + 8082 порт
+
+* Команда vagrant up создает две виртуальные машины web и ansible
+* Заходим на ВМ ansible и запускаем подготовленный плейбук
+```
+vagrant ssh ansible
+[vagrant@ansible ~]$ cd /vagrant
+[vagrant@ansible vagrant]$ ansible-playbook ./web.yml 
+```
+* После того как плейбук закончит работать можно проверять домашнюю работу
+* 
+ 
